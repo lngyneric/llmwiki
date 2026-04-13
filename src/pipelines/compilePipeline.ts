@@ -10,10 +10,10 @@ import { appendLog } from "../core/log.js";
 import { VolcengineProvider } from "../provider/volcengine.js";
 import { compileSystemPrompt, compileUserPrompt } from "../templates/defaultPrompts.js";
 
-function wikiPathForRaw(root: string, rawAbs: string): string {
-  const rel = path.relative(path.join(root, "raw"), rawAbs);
+function wikiPathForRaw(root: string, rawDir: string, wikiDir: string, rawAbs: string): string {
+  const rel = path.relative(path.resolve(root, rawDir), rawAbs);
   const noExt = rel.replace(/\.(md|txt)$/i, "");
-  return path.join(root, "wiki", "sources", `${noExt}.md`);
+  return path.join(path.resolve(root, wikiDir), "sources", `${noExt}.md`);
 }
 
 export async function compilePipeline(opts: { root?: string; full?: boolean }) {
@@ -23,7 +23,8 @@ export async function compilePipeline(opts: { root?: string; full?: boolean }) {
   const cfg = await loadConfig(root);
   const index = await loadIndex(paths.indexFile);
 
-  const rawFiles = await globby(["**/*.md", "**/*.txt"], { cwd: paths.rawDir, absolute: true });
+  const rawDir = path.resolve(root, cfg.paths.rawDir);
+  const rawFiles = await globby(["**/*.md", "**/*.txt"], { cwd: rawDir, absolute: true });
 
   const provider = new VolcengineProvider({
     model: cfg.provider.model,
@@ -50,7 +51,7 @@ export async function compilePipeline(opts: { root?: string; full?: boolean }) {
         prompt: compileUserPrompt(relKey, rawText)
       });
 
-      const wikiAbs = wikiPathForRaw(root, f);
+      const wikiAbs = wikiPathForRaw(root, cfg.paths.rawDir, cfg.paths.wikiDir, f);
       const header = [
         "---",
         `source: ${relKey}`,

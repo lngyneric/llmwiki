@@ -23,8 +23,9 @@ export async function queryPipeline(opts: { root?: string; question: string }) {
   const paths = getProjectPaths(root);
   const cfg = await loadConfig(root);
 
-  const hasWiki = await fileExists(paths.wikiDir);
-  const wikiFiles = hasWiki ? await globby(["**/*.md"], { cwd: paths.wikiDir, absolute: true }) : [];
+  const wikiDir = path.resolve(root, cfg.paths.wikiDir);
+  const hasWiki = await fileExists(wikiDir);
+  const wikiFiles = hasWiki ? await globby(["**/*.md"], { cwd: wikiDir, absolute: true }) : [];
 
   // MVP: keyword count scoring（简单可用，后续可换 BM25/向量）
   const qTokens = opts.question.split(/\s+/).filter(Boolean);
