@@ -18,7 +18,7 @@ export class VolcengineProvider implements LlmProvider {
       throw new Error("Missing VOLC_BASE_URL or VOLC_API_KEY");
     }
 
-    const resp = await fetch(`${baseUrl.replace(/\\/$/, "")}/v1/chat/completions`, {
+    const resp = await fetch(`${baseUrl.replace(/\/$/, "")}/v1/chat/completions`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -46,4 +46,3 @@ export class VolcengineProvider implements LlmProvider {
     return { text: content, raw: json };
   }
 }
-

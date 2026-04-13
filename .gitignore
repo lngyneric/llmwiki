@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+
+# 运行产物（默认不纳入版本控制，可按需移除）
+outputs/
+wiki/
+.llm-wiki/
+
