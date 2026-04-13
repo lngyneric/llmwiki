@@ -39,7 +39,8 @@ export async function compilePipeline(opts: { root?: string; full?: boolean }) {
     const relKey = path.relative(root, f).replace(/\\/g, "/");
     const sha = await sha256File(f);
     const prev = index.raw[relKey];
-    const needs = !!opts.full || !prev || prev.sha256 !== sha;
+    // 增量判断：hash 变化 或 上次失败（允许重试） 或 full
+    const needs = !!opts.full || !prev || prev.sha256 !== sha || prev.status === "error";
     if (!needs) continue;
 
     try {
@@ -85,4 +86,3 @@ export async function compilePipeline(opts: { root?: string; full?: boolean }) {
 
   return { updated, errors };
 }
-
