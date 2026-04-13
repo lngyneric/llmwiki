@@ -7,3 +7,8 @@ outputs/
 wiki/
 .llm-wiki/
 
+# 内容区（默认不提交，避免把个人剪藏进 git；如需版本控制可移除）
+raw/
+
+# 本地配置（默认不提交；可改为提交一个 config.example.json）
+config/llm-wiki.config.json
