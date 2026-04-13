@@ -12,13 +12,22 @@ export class VolcengineProvider implements LlmProvider {
   ) {}
 
   async generateText(input: GenerateTextInput): Promise<GenerateTextOutput> {
-    const baseUrl = this.cfg.baseUrl ?? process.env.VOLC_BASE_URL ?? "";
-    const apiKey = process.env.VOLC_API_KEY ?? "";
+    // 兼容两套命名：VOLC_* / ARK_*
+    const baseUrl =
+      this.cfg.baseUrl ?? process.env.VOLC_BASE_URL ?? process.env.ARK_BASE_URL ?? "";
+    const apiKey = process.env.VOLC_API_KEY ?? process.env.ARK_API_KEY ?? "";
     if (!baseUrl || !apiKey) {
-      throw new Error("Missing VOLC_BASE_URL or VOLC_API_KEY");
+      throw new Error("Missing VOLC_BASE_URL/ARK_BASE_URL or VOLC_API_KEY/ARK_API_KEY");
     }
 
-    const resp = await fetch(`${baseUrl.replace(/\/$/, "")}/v1/chat/completions`, {
+    const normalizedBase = baseUrl.replace(/\/$/, "");
+    // 如果 baseUrl 已经是 /api/.../v3 这类前缀，则按其下的 /chat/completions
+    // 否则按 OpenAI 兼容的 /v1/chat/completions
+    const endpoint = /\/v3$/.test(normalizedBase)
+      ? `${normalizedBase}/chat/completions`
+      : `${normalizedBase}/v1/chat/completions`;
+
+    const resp = await fetch(endpoint, {
       method: "POST",
       headers: {
         "content-type": "application/json",
