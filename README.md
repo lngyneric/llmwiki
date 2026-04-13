@@ -7,6 +7,8 @@
 ```bash
 npm i
 npm run dev -- init --model YOUR_MODEL_NAME
+cp .env.example .env
+# 编辑 .env 填入 ARK_BASE_URL / ARK_API_KEY（不要提交到 git）
 echo "# test\nhello" > raw/a.md
 npm run dev -- compile
 npm run dev -- query "hello 是什么"

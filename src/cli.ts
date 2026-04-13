@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import "dotenv/config";
 import { Command } from "commander";
 import { initCommand } from "./commands/init.js";
 import { compileCommand } from "./commands/compile.js";
@@ -41,4 +42,3 @@ program
   });
 
 program.parse();
-
