@@ -13,5 +13,6 @@ export type GenerateTextOutput = {
 export interface LlmProvider {
   name: string;
   generateText(input: GenerateTextInput): Promise<GenerateTextOutput>;
+  generateEmbeddings?(texts: string[]): Promise<number[][]>;
 }
 

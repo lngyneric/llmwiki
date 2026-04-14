@@ -16,13 +16,17 @@ export type ProjectPaths = {
 export function getProjectPaths(root = process.cwd()): ProjectPaths {
   const configFile = path.join(root, "config", "llm-wiki.config.json");
   let wikiDir = path.join(root, "wiki");
+  let rawDir = path.join(root, "raw");
+  let outputsDir = path.join(root, "outputs");
   
-  // Try to load wikiDir from config if it exists
+  // Try to load dirs from config if it exists
   try {
     if (fs.existsSync(configFile)) {
       const config = JSON.parse(fs.readFileSync(configFile, "utf-8"));
-      if (config.paths && config.paths.wikiDir) {
-        wikiDir = path.resolve(root, config.paths.wikiDir);
+      if (config.paths) {
+        if (config.paths.wikiDir) wikiDir = path.resolve(root, config.paths.wikiDir);
+        if (config.paths.rawDir) rawDir = path.resolve(root, config.paths.rawDir);
+        if (config.paths.outputsDir) outputsDir = path.resolve(root, config.paths.outputsDir);
       }
     }
   } catch (e) {
@@ -31,9 +35,9 @@ export function getProjectPaths(root = process.cwd()): ProjectPaths {
 
   return {
     root,
-    rawDir: path.join(root, "raw"),
+    rawDir,
     wikiDir,
-    outputsDir: path.join(root, "outputs"),
+    outputsDir,
     promptsDir: path.join(root, "prompts"),
     configFile,
     stateDir: path.join(root, ".llm-wiki"),

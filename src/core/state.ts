@@ -28,3 +28,19 @@ export async function loadIndex(indexFile: string): Promise<IndexState> {
 export async function saveIndex(indexFile: string, state: IndexState): Promise<void> {
   await writeFileAtomic(indexFile, JSON.stringify(state, null, 2));
 }
+
+export type EmbeddingsState = Record<string, { hash: string; vector: number[] }>;
+
+export async function loadEmbeddings(file: string): Promise<EmbeddingsState> {
+  if (!(await fileExists(file))) return {};
+  try {
+    const raw = await fs.readFile(file, "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+export async function saveEmbeddings(file: string, state: EmbeddingsState): Promise<void> {
+  await writeFileAtomic(file, JSON.stringify(state));
+}

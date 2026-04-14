@@ -1,0 +1,10 @@
+{
+  "id": "obsidian-llmwiki-plugin",
+  "name": "LLM Wiki",
+  "version": "1.0.1",
+  "minAppVersion": "0.15.0",
+  "description": "Compile your vault notes into an LLM-maintained Wiki and query it directly.",
+  "author": "Trae",
+  "authorUrl": "",
+  "isDesktopOnly": true
+}
