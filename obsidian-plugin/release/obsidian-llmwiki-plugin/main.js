@@ -6334,7 +6334,8 @@ var DEFAULT_SETTINGS = {
   embedProviderType: "volcengine",
   embedApiKey: "",
   embedBaseUrl: "https://ark.cn-beijing.volces.com/api/v3",
-  embedModelName: "ep-20240521-embed-xxx"
+  embedModelName: "ep-20240521-embed-xxx",
+  outputLanguage: "\u4E2D\u6587"
 };
 var LLMWikiSettingTab = class extends import_obsidian.PluginSettingTab {
   constructor(app, plugin) {
@@ -6348,6 +6349,12 @@ var LLMWikiSettingTab = class extends import_obsidian.PluginSettingTab {
     new import_obsidian.Setting(containerEl).setName("Raw Directory Path").setDesc("Relative path to your raw notes folder (e.g., 'Inbox' or 'raw').").addText(
       (text) => text.setPlaceholder("raw").setValue(this.plugin.settings.rawPath).onChange(async (value) => {
         this.plugin.settings.rawPath = value;
+        await this.plugin.saveSettings();
+      })
+    );
+    new import_obsidian.Setting(containerEl).setName("Output Language (Compilation)").setDesc("The language to use when compiling raw notes into Wiki pages. 'Original' means keep the source language.").addDropdown(
+      (dropdown) => dropdown.addOption("\u4E2D\u6587", "\u4E2D\u6587 (Chinese)").addOption("English", "English").addOption("Original", "\u539F\u8BED\u8A00 (Keep Original)").setValue(this.plugin.settings.outputLanguage).onChange(async (value) => {
+        this.plugin.settings.outputLanguage = value;
         await this.plugin.saveSettings();
       })
     );
@@ -6527,7 +6534,7 @@ async function appendLog(logFile, title, lines) {
 var defaultConfigJson = (model = "YOUR_MODEL_NAME") => JSON.stringify({
   paths: { rawDir: "raw", wikiDir: "wiki", outputsDir: "outputs", stateDir: ".llm-wiki" },
   provider: { type: "volcengine", model, temperature: 0.2, maxTokens: 2e3 },
-  compile: { concurrency: 2 },
+  compile: { concurrency: 2, language: "\u4E2D\u6587" },
   query: { topK: 8 }
 }, null, 2);
 
@@ -22016,7 +22023,8 @@ var PathsConfigSchema = external_exports.object({
   stateDir: external_exports.string().default(".llm-wiki")
 });
 var CompileConfigSchema = external_exports.object({
-  concurrency: external_exports.number().int().min(1).max(8).default(2)
+  concurrency: external_exports.number().int().min(1).max(8).default(2),
+  language: external_exports.string().default("\u4E2D\u6587")
 });
 var QueryConfigSchema = external_exports.object({
   topK: external_exports.number().int().min(1).max(50).default(8)
@@ -22030,7 +22038,7 @@ var ConfigSchema = external_exports.object({
   }),
   provider: ProviderConfigSchema,
   embedding: EmbeddingConfigSchema.optional(),
-  compile: CompileConfigSchema.default({ concurrency: 2 }),
+  compile: CompileConfigSchema.default({ concurrency: 2, language: "\u4E2D\u6587" }),
   query: QueryConfigSchema.default({ topK: 8 })
 });
 async function loadConfig(root = process.cwd()) {
@@ -22347,17 +22355,23 @@ async function compilePipeline(opts) {
       const wikiAbs = wikiPathForRaw(root, cfg.paths.rawDir, cfg.paths.wikiDir, f);
       const wikiRel = import_node_path9.default.relative(root, wikiAbs).replace(/\\/g, "/");
       let rawOutText = "";
+      const langInstruction = cfg.compile.language && cfg.compile.language !== "\u4E2D\u6587" ? `
+
+[CRITICAL INSTRUCTION: The user has specified the output language as: ${cfg.compile.language}. ${cfg.compile.language === "Original" ? "You MUST strictly output the ENTIRE Markdown content and Concepts in the EXACT SAME LANGUAGE as the source text. DO NOT translate it into Chinese." : `You MUST strictly output the ENTIRE Markdown content and Concepts in ${cfg.compile.language}.`}]` : "";
+      const userLangInstruction = cfg.compile.language && cfg.compile.language !== "\u4E2D\u6587" ? `
+
+[CRITICAL REPEAT: OUTPUT MUST BE IN ${cfg.compile.language === "Original" ? "THE ORIGINAL LANGUAGE OF THE SOURCE TEXT" : cfg.compile.language}. DO NOT OUTPUT IN CHINESE UNLESS THE SOURCE IS CHINESE.]` : "";
       if (await fileExists(wikiAbs)) {
         const existingWiki = await import_promises8.default.readFile(wikiAbs, "utf-8");
         const out = await textProvider.generateText({
-          system: updateSystemPrompt,
-          prompt: updateUserPrompt(relKey, existingWiki, rawText)
+          system: updateSystemPrompt + langInstruction,
+          prompt: updateUserPrompt(relKey, existingWiki, rawText) + userLangInstruction
         });
         rawOutText = out.text.trim();
       } else {
         const out = await textProvider.generateText({
-          system: compileSystemPrompt,
-          prompt: compileUserPrompt(relKey, rawText)
+          system: compileSystemPrompt + langInstruction,
+          prompt: compileUserPrompt(relKey, rawText) + userLangInstruction
         });
         rawOutText = out.text.trim();
       }
@@ -22385,7 +22399,7 @@ async function compilePipeline(opts) {
       ].join("\n");
       const finalContent = header + wikiContent + "\n";
       await writeFileAtomic(wikiAbs, finalContent);
-      updated.push(wikiRel);
+      updated.push({ file: wikiRel, language: cfg.compile.language || "\u4E2D\u6587" });
       const conceptsDir = import_node_path9.default.join(root, cfg.paths.wikiDir, "concepts");
       if (concepts.length > 0) {
         await import_promises8.default.mkdir(conceptsDir, { recursive: true });
@@ -22496,10 +22510,16 @@ ${srcText}`);
       }
       if (needsUpdate) {
         console.log("Auto-updating authoritative file:", af);
+        const langInstruction = cfg.compile.language && cfg.compile.language !== "\u4E2D\u6587" ? `
+
+[CRITICAL INSTRUCTION: The user has specified the output language as: ${cfg.compile.language}. ${cfg.compile.language === "Original" ? "You MUST strictly output the ENTIRE Markdown content in the EXACT SAME LANGUAGE as the source text. DO NOT translate it into Chinese." : `You MUST strictly output the ENTIRE Markdown content in ${cfg.compile.language}.`}]` : "";
+        const userLangInstruction = cfg.compile.language && cfg.compile.language !== "\u4E2D\u6587" ? `
+
+[CRITICAL REPEAT: OUTPUT MUST BE IN ${cfg.compile.language === "Original" ? "THE ORIGINAL LANGUAGE OF THE SOURCE TEXT" : cfg.compile.language}. DO NOT OUTPUT IN CHINESE UNLESS THE SOURCE IS CHINESE.]` : "";
         try {
           const out = await textProvider.generateText({
-            system: authoritativeUpdateSystemPrompt,
-            prompt: authoritativeUpdateUserPrompt(content, newSourceContents.join("\n\n"))
+            system: authoritativeUpdateSystemPrompt + langInstruction,
+            prompt: authoritativeUpdateUserPrompt(content, newSourceContents.join("\n\n")) + userLangInstruction
           });
           const newTimestamp = new Date().toISOString();
           const newYamlStr = yamlStr.replace(/last_updated:\s*[^\n]+/, `last_updated: ${newTimestamp}`);
@@ -22513,7 +22533,7 @@ ${newYamlStr}
 ---
 
 ${finalContent}`);
-          updated.push(import_node_path9.default.relative(root, af).replace(/\\/g, "/"));
+          updated.push({ file: import_node_path9.default.relative(root, af).replace(/\\/g, "/"), language: cfg.compile.language || "\u4E2D\u6587" });
         } catch (e) {
           console.error("Failed to update authoritative file:", af, e.message);
           errors.push(`Authoritative update failed for ${af}: ${e.message}`);
@@ -22526,10 +22546,11 @@ ${finalContent}`);
   await appendLog(paths.logFile, "compile", [
     `rawTotal: ${rawFiles.length}`,
     `wikiUpdated: ${updated.length}`,
-    ...updated.length ? updated.map((p) => `wiki: ${p}`) : [],
+    `languageSetting: ${cfg.compile.language || "\u4E2D\u6587"}`,
+    ...updated.length ? updated.map((p) => `wiki: ${p.file} (lang: ${p.language})`) : [],
     ...errors.length ? ["status: error", ...errors.map((x) => `error: ${x}`)] : ["status: ok"]
   ]);
-  return { updated, errors };
+  return { updated: updated.map((u) => u.file), errors };
 }
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/pipelines/queryPipeline.js
@@ -22837,7 +22858,8 @@ var LLMWikiPlugin = class extends import_obsidian3.Plugin {
         apiKey: this.settings.embedApiKey || this.settings.apiKey
       },
       compile: {
-        concurrency: 2
+        concurrency: 2,
+        language: this.settings.outputLanguage
       },
       query: {
         topK: 8

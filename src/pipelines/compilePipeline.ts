@@ -47,7 +47,7 @@ export async function compilePipeline(opts: { root?: string; full?: boolean; fet
     });
   }
 
-  const updated: string[] = [];
+  const updated: Array<{ file: string; language: string }> = [];
   const errors: string[] = [];
 
   for (const f of rawFiles) {
@@ -93,19 +93,28 @@ export async function compilePipeline(opts: { root?: string; full?: boolean; fet
       const wikiRel = path.relative(root, wikiAbs).replace(/\\/g, "/");
 
       let rawOutText = "";
+      
+      const langInstruction = cfg.compile.language && cfg.compile.language !== "中文"
+        ? `\n\n[CRITICAL INSTRUCTION: The user has specified the output language as: ${cfg.compile.language}. ${cfg.compile.language === "Original" ? "You MUST strictly output the ENTIRE Markdown content and Concepts in the EXACT SAME LANGUAGE as the source text. DO NOT translate it into Chinese." : `You MUST strictly output the ENTIRE Markdown content and Concepts in ${cfg.compile.language}.`}]`
+        : "";
+
+      const userLangInstruction = cfg.compile.language && cfg.compile.language !== "中文"
+        ? `\n\n[CRITICAL REPEAT: OUTPUT MUST BE IN ${cfg.compile.language === "Original" ? "THE ORIGINAL LANGUAGE OF THE SOURCE TEXT" : cfg.compile.language}. DO NOT OUTPUT IN CHINESE UNLESS THE SOURCE IS CHINESE.]`
+        : "";
+
       if (await fileExists(wikiAbs)) {
         // Update Mode
         const existingWiki = await fs.readFile(wikiAbs, "utf-8");
         const out = await textProvider.generateText({
-          system: updateSystemPrompt,
-          prompt: updateUserPrompt(relKey, existingWiki, rawText)
+          system: updateSystemPrompt + langInstruction,
+          prompt: updateUserPrompt(relKey, existingWiki, rawText) + userLangInstruction
         });
         rawOutText = out.text.trim();
       } else {
         // Create Mode
         const out = await textProvider.generateText({
-          system: compileSystemPrompt,
-          prompt: compileUserPrompt(relKey, rawText)
+          system: compileSystemPrompt + langInstruction,
+          prompt: compileUserPrompt(relKey, rawText) + userLangInstruction
         });
         rawOutText = out.text.trim();
       }
@@ -139,7 +148,7 @@ export async function compilePipeline(opts: { root?: string; full?: boolean; fet
       
       const finalContent = header + wikiContent + "\n";
       await writeFileAtomic(wikiAbs, finalContent);
-      updated.push(wikiRel);
+      updated.push({ file: wikiRel, language: cfg.compile.language || "中文" });
 
       // --- Concept Processing ---
       const conceptsDir = path.join(root, cfg.paths.wikiDir, "concepts");
@@ -258,10 +267,19 @@ ${logEntry}
 
       if (needsUpdate) {
         console.log("Auto-updating authoritative file:", af);
+        
+        const langInstruction = cfg.compile.language && cfg.compile.language !== "中文"
+          ? `\n\n[CRITICAL INSTRUCTION: The user has specified the output language as: ${cfg.compile.language}. ${cfg.compile.language === "Original" ? "You MUST strictly output the ENTIRE Markdown content in the EXACT SAME LANGUAGE as the source text. DO NOT translate it into Chinese." : `You MUST strictly output the ENTIRE Markdown content in ${cfg.compile.language}.`}]`
+          : "";
+          
+        const userLangInstruction = cfg.compile.language && cfg.compile.language !== "中文"
+          ? `\n\n[CRITICAL REPEAT: OUTPUT MUST BE IN ${cfg.compile.language === "Original" ? "THE ORIGINAL LANGUAGE OF THE SOURCE TEXT" : cfg.compile.language}. DO NOT OUTPUT IN CHINESE UNLESS THE SOURCE IS CHINESE.]`
+          : "";
+
         try {
           const out = await textProvider.generateText({
-            system: authoritativeUpdateSystemPrompt,
-            prompt: authoritativeUpdateUserPrompt(content, newSourceContents.join("\n\n"))
+            system: authoritativeUpdateSystemPrompt + langInstruction,
+            prompt: authoritativeUpdateUserPrompt(content, newSourceContents.join("\n\n")) + userLangInstruction
           });
           
           const newTimestamp = new Date().toISOString();
@@ -275,7 +293,7 @@ ${logEntry}
           }
           
           await writeFileAtomic(af, `---\n${newYamlStr}\n---\n\n${finalContent}`);
-          updated.push(path.relative(root, af).replace(/\\/g, "/"));
+          updated.push({ file: path.relative(root, af).replace(/\\/g, "/"), language: cfg.compile.language || "中文" });
         } catch (e: any) {
           console.error("Failed to update authoritative file:", af, e.message);
           errors.push(`Authoritative update failed for ${af}: ${e.message}`);
@@ -290,9 +308,10 @@ ${logEntry}
   await appendLog(paths.logFile, "compile", [
     `rawTotal: ${rawFiles.length}`,
     `wikiUpdated: ${updated.length}`,
-    ...(updated.length ? updated.map((p) => `wiki: ${p}`) : []),
+    `languageSetting: ${cfg.compile.language || "中文"}`,
+    ...(updated.length ? updated.map((p) => `wiki: ${p.file} (lang: ${p.language})`) : []),
     ...(errors.length ? ["status: error", ...errors.map((x) => `error: ${x}`)] : ["status: ok"])
   ]);
 
-  return { updated, errors };
+  return { updated: updated.map(u => u.file), errors };
 }

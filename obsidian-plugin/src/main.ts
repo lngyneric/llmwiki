@@ -136,7 +136,8 @@ export default class LLMWikiPlugin extends Plugin {
         apiKey: this.settings.embedApiKey || this.settings.apiKey
       },
       compile: {
-        concurrency: 2
+        concurrency: 2,
+        language: this.settings.outputLanguage
       },
       query: {
         topK: 8

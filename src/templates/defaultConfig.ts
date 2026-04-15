@@ -3,7 +3,7 @@ export const defaultConfigJson = (model = "YOUR_MODEL_NAME") =>
     {
       paths: { rawDir: "raw", wikiDir: "wiki", outputsDir: "outputs", stateDir: ".llm-wiki" },
       provider: { type: "volcengine", model, temperature: 0.2, maxTokens: 2000 },
-      compile: { concurrency: 2 },
+      compile: { concurrency: 2, language: "中文" },
       query: { topK: 8 }
     },
     null,

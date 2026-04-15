@@ -16,6 +16,8 @@ export interface LLMWikiSettings {
   embedApiKey: string;
   embedBaseUrl: string;
   embedModelName: string;
+  // Compilation
+  outputLanguage: string;
 }
 
 export const DEFAULT_SETTINGS: LLMWikiSettings = {
@@ -31,6 +33,7 @@ export const DEFAULT_SETTINGS: LLMWikiSettings = {
   embedApiKey: "",
   embedBaseUrl: "https://ark.cn-beijing.volces.com/api/v3",
   embedModelName: "ep-20240521-embed-xxx",
+  outputLanguage: "中文",
 };
 
 export class LLMWikiSettingTab extends PluginSettingTab {
@@ -56,6 +59,21 @@ export class LLMWikiSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.rawPath)
           .onChange(async (value) => {
             this.plugin.settings.rawPath = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName("Output Language (Compilation)")
+      .setDesc("The language to use when compiling raw notes into Wiki pages. 'Original' means keep the source language.")
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOption("中文", "中文 (Chinese)")
+          .addOption("English", "English")
+          .addOption("Original", "原语言 (Keep Original)")
+          .setValue(this.plugin.settings.outputLanguage)
+          .onChange(async (value) => {
+            this.plugin.settings.outputLanguage = value;
             await this.plugin.saveSettings();
           })
       );

@@ -27,7 +27,8 @@ const PathsConfigSchema = z.object({
 });
 
 const CompileConfigSchema = z.object({
-  concurrency: z.number().int().min(1).max(8).default(2)
+  concurrency: z.number().int().min(1).max(8).default(2),
+  language: z.string().default("中文")
 });
 
 const QueryConfigSchema = z.object({
@@ -43,7 +44,7 @@ export const ConfigSchema = z.object({
   }),
   provider: ProviderConfigSchema,
   embedding: EmbeddingConfigSchema.optional(),
-  compile: CompileConfigSchema.default({ concurrency: 2 }),
+  compile: CompileConfigSchema.default({ concurrency: 2, language: "中文" }),
   query: QueryConfigSchema.default({ topK: 8 })
 });
 
