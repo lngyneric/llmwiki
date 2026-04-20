@@ -125,7 +125,7 @@ var require_path = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.convertPosixPathToPattern = exports.convertWindowsPathToPattern = exports.convertPathToPattern = exports.escapePosixPath = exports.escapeWindowsPath = exports.escape = exports.removeLeadingDotSegment = exports.makeAbsolute = exports.unixify = void 0;
     var os3 = require("os");
-    var path11 = require("path");
+    var path13 = require("path");
     var IS_WINDOWS_PLATFORM = os3.platform() === "win32";
     var LEADING_DOT_SEGMENT_CHARACTERS_COUNT = 2;
     var POSIX_UNESCAPED_GLOB_SYMBOLS_RE = /(\\?)([()*?[\]{|}]|^!|[!+@](?=\()|\\(?![!()*+?@[\]{|}]))/g;
@@ -137,7 +137,7 @@ var require_path = __commonJS({
     }
     exports.unixify = unixify;
     function makeAbsolute(cwd, filepath) {
-      return path11.resolve(cwd, filepath);
+      return path13.resolve(cwd, filepath);
     }
     exports.makeAbsolute = makeAbsolute;
     function removeLeadingDotSegment(entry) {
@@ -1463,7 +1463,7 @@ var require_braces = __commonJS({
 var require_constants2 = __commonJS({
   "node_modules/.pnpm/picomatch@2.3.2/node_modules/picomatch/lib/constants.js"(exports, module2) {
     "use strict";
-    var path11 = require("path");
+    var path13 = require("path");
     var WIN_SLASH = "\\\\/";
     var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
     var DEFAULT_MAX_EXTGLOB_RECURSION = 0;
@@ -1637,7 +1637,7 @@ var require_constants2 = __commonJS({
       /* | */
       CHAR_ZERO_WIDTH_NOBREAK_SPACE: 65279,
       /* \uFEFF */
-      SEP: path11.sep,
+      SEP: path13.sep,
       /**
        * Create EXTGLOB_CHARS
        */
@@ -1664,7 +1664,7 @@ var require_constants2 = __commonJS({
 var require_utils2 = __commonJS({
   "node_modules/.pnpm/picomatch@2.3.2/node_modules/picomatch/lib/utils.js"(exports) {
     "use strict";
-    var path11 = require("path");
+    var path13 = require("path");
     var win32 = process.platform === "win32";
     var {
       REGEX_BACKSLASH,
@@ -1693,7 +1693,7 @@ var require_utils2 = __commonJS({
       if (options && typeof options.windows === "boolean") {
         return options.windows;
       }
-      return win32 === true || path11.sep === "\\";
+      return win32 === true || path13.sep === "\\";
     };
     exports.escapeLast = (input, char, lastIdx) => {
       const idx = input.lastIndexOf(char, lastIdx);
@@ -3070,7 +3070,7 @@ var require_parse2 = __commonJS({
 var require_picomatch = __commonJS({
   "node_modules/.pnpm/picomatch@2.3.2/node_modules/picomatch/lib/picomatch.js"(exports, module2) {
     "use strict";
-    var path11 = require("path");
+    var path13 = require("path");
     var scan = require_scan();
     var parse3 = require_parse2();
     var utils = require_utils2();
@@ -3156,7 +3156,7 @@ var require_picomatch = __commonJS({
     };
     picomatch.matchBase = (input, glob, options, posix = utils.isWindows(options)) => {
       const regex = glob instanceof RegExp ? glob : picomatch.makeRe(glob, options);
-      return regex.test(path11.basename(input));
+      return regex.test(path13.basename(input));
     };
     picomatch.isMatch = (str, patterns, options) => picomatch(patterns, options)(str);
     picomatch.parse = (pattern, options) => {
@@ -3391,7 +3391,7 @@ var require_pattern = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.isAbsolute = exports.partitionAbsoluteAndRelative = exports.removeDuplicateSlashes = exports.matchAny = exports.convertPatternsToRe = exports.makeRe = exports.getPatternParts = exports.expandBraceExpansion = exports.expandPatternsWithBraceExpansion = exports.isAffectDepthOfReadingPattern = exports.endsWithSlashGlobStar = exports.hasGlobStar = exports.getBaseDirectory = exports.isPatternRelatedToParentDirectory = exports.getPatternsOutsideCurrentDirectory = exports.getPatternsInsideCurrentDirectory = exports.getPositivePatterns = exports.getNegativePatterns = exports.isPositivePattern = exports.isNegativePattern = exports.convertToNegativePattern = exports.convertToPositivePattern = exports.isDynamicPattern = exports.isStaticPattern = void 0;
-    var path11 = require("path");
+    var path13 = require("path");
     var globParent = require_glob_parent();
     var micromatch = require_micromatch();
     var GLOBSTAR = "**";
@@ -3486,7 +3486,7 @@ var require_pattern = __commonJS({
     }
     exports.endsWithSlashGlobStar = endsWithSlashGlobStar;
     function isAffectDepthOfReadingPattern(pattern) {
-      const basename = path11.basename(pattern);
+      const basename = path13.basename(pattern);
       return endsWithSlashGlobStar(pattern) || isStaticPattern(basename);
     }
     exports.isAffectDepthOfReadingPattern = isAffectDepthOfReadingPattern;
@@ -3544,7 +3544,7 @@ var require_pattern = __commonJS({
     }
     exports.partitionAbsoluteAndRelative = partitionAbsoluteAndRelative;
     function isAbsolute(pattern) {
-      return path11.isAbsolute(pattern);
+      return path13.isAbsolute(pattern);
     }
     exports.isAbsolute = isAbsolute;
   }
@@ -3719,10 +3719,10 @@ var require_utils3 = __commonJS({
     exports.array = array2;
     var errno = require_errno();
     exports.errno = errno;
-    var fs13 = require_fs();
-    exports.fs = fs13;
-    var path11 = require_path();
-    exports.path = path11;
+    var fs16 = require_fs();
+    exports.fs = fs16;
+    var path13 = require_path();
+    exports.path = path13;
     var pattern = require_pattern();
     exports.pattern = pattern;
     var stream = require_stream();
@@ -3834,8 +3834,8 @@ var require_async = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.read = void 0;
-    function read(path11, settings, callback) {
-      settings.fs.lstat(path11, (lstatError, lstat) => {
+    function read(path13, settings, callback) {
+      settings.fs.lstat(path13, (lstatError, lstat) => {
         if (lstatError !== null) {
           callFailureCallback(callback, lstatError);
           return;
@@ -3844,7 +3844,7 @@ var require_async = __commonJS({
           callSuccessCallback(callback, lstat);
           return;
         }
-        settings.fs.stat(path11, (statError, stat) => {
+        settings.fs.stat(path13, (statError, stat) => {
           if (statError !== null) {
             if (settings.throwErrorOnBrokenSymbolicLink) {
               callFailureCallback(callback, statError);
@@ -3876,13 +3876,13 @@ var require_sync = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.read = void 0;
-    function read(path11, settings) {
-      const lstat = settings.fs.lstatSync(path11);
+    function read(path13, settings) {
+      const lstat = settings.fs.lstatSync(path13);
       if (!lstat.isSymbolicLink() || !settings.followSymbolicLink) {
         return lstat;
       }
       try {
-        const stat = settings.fs.statSync(path11);
+        const stat = settings.fs.statSync(path13);
         if (settings.markSymbolicLink) {
           stat.isSymbolicLink = () => true;
         }
@@ -3904,12 +3904,12 @@ var require_fs2 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createFileSystemAdapter = exports.FILE_SYSTEM_ADAPTER = void 0;
-    var fs13 = require("fs");
+    var fs16 = require("fs");
     exports.FILE_SYSTEM_ADAPTER = {
-      lstat: fs13.lstat,
-      stat: fs13.stat,
-      lstatSync: fs13.lstatSync,
-      statSync: fs13.statSync
+      lstat: fs16.lstat,
+      stat: fs16.stat,
+      lstatSync: fs16.lstatSync,
+      statSync: fs16.statSync
     };
     function createFileSystemAdapter(fsMethods) {
       if (fsMethods === void 0) {
@@ -3926,12 +3926,12 @@ var require_settings = __commonJS({
   "node_modules/.pnpm/@nodelib+fs.stat@2.0.5/node_modules/@nodelib/fs.stat/out/settings.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var fs13 = require_fs2();
+    var fs16 = require_fs2();
     var Settings = class {
       constructor(_options = {}) {
         this._options = _options;
         this.followSymbolicLink = this._getValue(this._options.followSymbolicLink, true);
-        this.fs = fs13.createFileSystemAdapter(this._options.fs);
+        this.fs = fs16.createFileSystemAdapter(this._options.fs);
         this.markSymbolicLink = this._getValue(this._options.markSymbolicLink, false);
         this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
       }
@@ -3953,17 +3953,17 @@ var require_out = __commonJS({
     var sync = require_sync();
     var settings_1 = require_settings();
     exports.Settings = settings_1.default;
-    function stat(path11, optionsOrSettingsOrCallback, callback) {
+    function stat(path13, optionsOrSettingsOrCallback, callback) {
       if (typeof optionsOrSettingsOrCallback === "function") {
-        async.read(path11, getSettings(), optionsOrSettingsOrCallback);
+        async.read(path13, getSettings(), optionsOrSettingsOrCallback);
         return;
       }
-      async.read(path11, getSettings(optionsOrSettingsOrCallback), callback);
+      async.read(path13, getSettings(optionsOrSettingsOrCallback), callback);
     }
     exports.stat = stat;
-    function statSync(path11, optionsOrSettings) {
+    function statSync(path13, optionsOrSettings) {
       const settings = getSettings(optionsOrSettings);
-      return sync.read(path11, settings);
+      return sync.read(path13, settings);
     }
     exports.statSync = statSync;
     function getSettings(settingsOrOptions = {}) {
@@ -4089,8 +4089,8 @@ var require_utils4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fs = void 0;
-    var fs13 = require_fs3();
-    exports.fs = fs13;
+    var fs16 = require_fs3();
+    exports.fs = fs16;
   }
 });
 
@@ -4182,16 +4182,16 @@ var require_async2 = __commonJS({
           return;
         }
         const tasks = names.map((name) => {
-          const path11 = common.joinPathSegments(directory, name, settings.pathSegmentSeparator);
+          const path13 = common.joinPathSegments(directory, name, settings.pathSegmentSeparator);
           return (done) => {
-            fsStat.stat(path11, settings.fsStatSettings, (error48, stats) => {
+            fsStat.stat(path13, settings.fsStatSettings, (error48, stats) => {
               if (error48 !== null) {
                 done(error48);
                 return;
               }
               const entry = {
                 name,
-                path: path11,
+                path: path13,
                 dirent: utils.fs.createDirentFromStats(name, stats)
               };
               if (settings.stats) {
@@ -4285,14 +4285,14 @@ var require_fs4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createFileSystemAdapter = exports.FILE_SYSTEM_ADAPTER = void 0;
-    var fs13 = require("fs");
+    var fs16 = require("fs");
     exports.FILE_SYSTEM_ADAPTER = {
-      lstat: fs13.lstat,
-      stat: fs13.stat,
-      lstatSync: fs13.lstatSync,
-      statSync: fs13.statSync,
-      readdir: fs13.readdir,
-      readdirSync: fs13.readdirSync
+      lstat: fs16.lstat,
+      stat: fs16.stat,
+      lstatSync: fs16.lstatSync,
+      statSync: fs16.statSync,
+      readdir: fs16.readdir,
+      readdirSync: fs16.readdirSync
     };
     function createFileSystemAdapter(fsMethods) {
       if (fsMethods === void 0) {
@@ -4309,15 +4309,15 @@ var require_settings2 = __commonJS({
   "node_modules/.pnpm/@nodelib+fs.scandir@2.1.5/node_modules/@nodelib/fs.scandir/out/settings.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path11 = require("path");
+    var path13 = require("path");
     var fsStat = require_out();
-    var fs13 = require_fs4();
+    var fs16 = require_fs4();
     var Settings = class {
       constructor(_options = {}) {
         this._options = _options;
         this.followSymbolicLinks = this._getValue(this._options.followSymbolicLinks, false);
-        this.fs = fs13.createFileSystemAdapter(this._options.fs);
-        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path11.sep);
+        this.fs = fs16.createFileSystemAdapter(this._options.fs);
+        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path13.sep);
         this.stats = this._getValue(this._options.stats, false);
         this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
         this.fsStatSettings = new fsStat.Settings({
@@ -4344,17 +4344,17 @@ var require_out2 = __commonJS({
     var sync = require_sync2();
     var settings_1 = require_settings2();
     exports.Settings = settings_1.default;
-    function scandir(path11, optionsOrSettingsOrCallback, callback) {
+    function scandir(path13, optionsOrSettingsOrCallback, callback) {
       if (typeof optionsOrSettingsOrCallback === "function") {
-        async.read(path11, getSettings(), optionsOrSettingsOrCallback);
+        async.read(path13, getSettings(), optionsOrSettingsOrCallback);
         return;
       }
-      async.read(path11, getSettings(optionsOrSettingsOrCallback), callback);
+      async.read(path13, getSettings(optionsOrSettingsOrCallback), callback);
     }
     exports.scandir = scandir;
-    function scandirSync(path11, optionsOrSettings) {
+    function scandirSync(path13, optionsOrSettings) {
       const settings = getSettings(optionsOrSettings);
-      return sync.read(path11, settings);
+      return sync.read(path13, settings);
     }
     exports.scandirSync = scandirSync;
     function getSettings(settingsOrOptions = {}) {
@@ -5004,7 +5004,7 @@ var require_settings3 = __commonJS({
   "node_modules/.pnpm/@nodelib+fs.walk@1.2.8/node_modules/@nodelib/fs.walk/out/settings.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path11 = require("path");
+    var path13 = require("path");
     var fsScandir = require_out2();
     var Settings = class {
       constructor(_options = {}) {
@@ -5014,7 +5014,7 @@ var require_settings3 = __commonJS({
         this.deepFilter = this._getValue(this._options.deepFilter, null);
         this.entryFilter = this._getValue(this._options.entryFilter, null);
         this.errorFilter = this._getValue(this._options.errorFilter, null);
-        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path11.sep);
+        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path13.sep);
         this.fsScandirSettings = new fsScandir.Settings({
           followSymbolicLinks: this._options.followSymbolicLinks,
           fs: this._options.fs,
@@ -5076,7 +5076,7 @@ var require_reader2 = __commonJS({
   "node_modules/.pnpm/fast-glob@3.3.3/node_modules/fast-glob/out/readers/reader.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path11 = require("path");
+    var path13 = require("path");
     var fsStat = require_out();
     var utils = require_utils3();
     var Reader = class {
@@ -5089,7 +5089,7 @@ var require_reader2 = __commonJS({
         });
       }
       _getFullEntryPath(filepath) {
-        return path11.resolve(this._settings.cwd, filepath);
+        return path13.resolve(this._settings.cwd, filepath);
       }
       _makeEntry(stats, pattern) {
         const entry = {
@@ -5505,7 +5505,7 @@ var require_provider = __commonJS({
   "node_modules/.pnpm/fast-glob@3.3.3/node_modules/fast-glob/out/providers/provider.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path11 = require("path");
+    var path13 = require("path");
     var deep_1 = require_deep();
     var entry_1 = require_entry();
     var error_1 = require_error();
@@ -5519,7 +5519,7 @@ var require_provider = __commonJS({
         this.entryTransformer = new entry_2.default(this._settings);
       }
       _getRootDirectory(task) {
-        return path11.resolve(this._settings.cwd, task.base);
+        return path13.resolve(this._settings.cwd, task.base);
       }
       _getReaderOptions(task) {
         const basePath = task.base === "." ? "" : task.base;
@@ -5700,16 +5700,16 @@ var require_settings4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DEFAULT_FILE_SYSTEM_ADAPTER = void 0;
-    var fs13 = require("fs");
+    var fs16 = require("fs");
     var os3 = require("os");
     var CPU_COUNT = Math.max(os3.cpus().length, 1);
     exports.DEFAULT_FILE_SYSTEM_ADAPTER = {
-      lstat: fs13.lstat,
-      lstatSync: fs13.lstatSync,
-      stat: fs13.stat,
-      statSync: fs13.statSync,
-      readdir: fs13.readdir,
-      readdirSync: fs13.readdirSync
+      lstat: fs16.lstat,
+      lstatSync: fs16.lstatSync,
+      stat: fs16.stat,
+      statSync: fs16.statSync,
+      readdir: fs16.readdir,
+      readdirSync: fs16.readdirSync
     };
     var Settings = class {
       constructor(_options = {}) {
@@ -6152,7 +6152,7 @@ var require_ignore = __commonJS({
       //   path matching.
       // - check `string` either `MODE_IGNORE` or `MODE_CHECK_IGNORE`
       // @returns {TestResult} true if a file is ignored
-      test(path11, checkUnignored, mode) {
+      test(path13, checkUnignored, mode) {
         let ignored = false;
         let unignored = false;
         let matchedRule;
@@ -6161,7 +6161,7 @@ var require_ignore = __commonJS({
           if (unignored === negative && ignored !== unignored || negative && !ignored && !unignored && !checkUnignored) {
             return;
           }
-          const matched = rule[mode].test(path11);
+          const matched = rule[mode].test(path13);
           if (!matched) {
             return;
           }
@@ -6182,17 +6182,17 @@ var require_ignore = __commonJS({
     var throwError = (message, Ctor) => {
       throw new Ctor(message);
     };
-    var checkPath = (path11, originalPath, doThrow) => {
-      if (!isString(path11)) {
+    var checkPath = (path13, originalPath, doThrow) => {
+      if (!isString(path13)) {
         return doThrow(
           `path must be a string, but got \`${originalPath}\``,
           TypeError
         );
       }
-      if (!path11) {
+      if (!path13) {
         return doThrow(`path must not be empty`, TypeError);
       }
-      if (checkPath.isNotRelative(path11)) {
+      if (checkPath.isNotRelative(path13)) {
         const r = "`path.relative()`d";
         return doThrow(
           `path should be a ${r} string, but got "${originalPath}"`,
@@ -6201,7 +6201,7 @@ var require_ignore = __commonJS({
       }
       return true;
     };
-    var isNotRelative = (path11) => REGEX_TEST_INVALID_PATH.test(path11);
+    var isNotRelative = (path13) => REGEX_TEST_INVALID_PATH.test(path13);
     checkPath.isNotRelative = isNotRelative;
     checkPath.convert = (p) => p;
     var Ignore = class {
@@ -6231,19 +6231,19 @@ var require_ignore = __commonJS({
       }
       // @returns {TestResult}
       _test(originalPath, cache, checkUnignored, slices) {
-        const path11 = originalPath && checkPath.convert(originalPath);
+        const path13 = originalPath && checkPath.convert(originalPath);
         checkPath(
-          path11,
+          path13,
           originalPath,
           this._strictPathCheck ? throwError : RETURN_FALSE
         );
-        return this._t(path11, cache, checkUnignored, slices);
+        return this._t(path13, cache, checkUnignored, slices);
       }
-      checkIgnore(path11) {
-        if (!REGEX_TEST_TRAILING_SLASH.test(path11)) {
-          return this.test(path11);
+      checkIgnore(path13) {
+        if (!REGEX_TEST_TRAILING_SLASH.test(path13)) {
+          return this.test(path13);
         }
-        const slices = path11.split(SLASH).filter(Boolean);
+        const slices = path13.split(SLASH).filter(Boolean);
         slices.pop();
         if (slices.length) {
           const parent = this._t(
@@ -6256,18 +6256,18 @@ var require_ignore = __commonJS({
             return parent;
           }
         }
-        return this._rules.test(path11, false, MODE_CHECK_IGNORE);
+        return this._rules.test(path13, false, MODE_CHECK_IGNORE);
       }
-      _t(path11, cache, checkUnignored, slices) {
-        if (path11 in cache) {
-          return cache[path11];
+      _t(path13, cache, checkUnignored, slices) {
+        if (path13 in cache) {
+          return cache[path13];
         }
         if (!slices) {
-          slices = path11.split(SLASH).filter(Boolean);
+          slices = path13.split(SLASH).filter(Boolean);
         }
         slices.pop();
         if (!slices.length) {
-          return cache[path11] = this._rules.test(path11, checkUnignored, MODE_IGNORE);
+          return cache[path13] = this._rules.test(path13, checkUnignored, MODE_IGNORE);
         }
         const parent = this._t(
           slices.join(SLASH) + SLASH,
@@ -6275,29 +6275,29 @@ var require_ignore = __commonJS({
           checkUnignored,
           slices
         );
-        return cache[path11] = parent.ignored ? parent : this._rules.test(path11, checkUnignored, MODE_IGNORE);
+        return cache[path13] = parent.ignored ? parent : this._rules.test(path13, checkUnignored, MODE_IGNORE);
       }
-      ignores(path11) {
-        return this._test(path11, this._ignoreCache, false).ignored;
+      ignores(path13) {
+        return this._test(path13, this._ignoreCache, false).ignored;
       }
       createFilter() {
-        return (path11) => !this.ignores(path11);
+        return (path13) => !this.ignores(path13);
       }
       filter(paths) {
         return makeArray(paths).filter(this.createFilter());
       }
       // @returns {TestResult}
-      test(path11) {
-        return this._test(path11, this._testCache, true);
+      test(path13) {
+        return this._test(path13, this._testCache, true);
       }
     };
     var factory = (options) => new Ignore(options);
-    var isPathValid = (path11) => checkPath(path11 && checkPath.convert(path11), path11, RETURN_FALSE);
+    var isPathValid = (path13) => checkPath(path13 && checkPath.convert(path13), path13, RETURN_FALSE);
     var setupWindows = () => {
       const makePosix = (str) => /^\\\\\?\\/.test(str) || /["<>|\u0000-\u001F]+/u.test(str) ? str : str.replace(/\\/g, "/");
       checkPath.convert = makePosix;
       const REGEX_TEST_WINDOWS_PATH_ABSOLUTE = /^[a-z]:\//i;
-      checkPath.isNotRelative = (path11) => REGEX_TEST_WINDOWS_PATH_ABSOLUTE.test(path11) || isNotRelative(path11);
+      checkPath.isNotRelative = (path13) => REGEX_TEST_WINDOWS_PATH_ABSOLUTE.test(path13) || isNotRelative(path13);
     };
     if (
       // Detect `process` so that it can run in browsers.
@@ -6318,7 +6318,7 @@ __export(main_exports, {
   default: () => LLMWikiPlugin
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian3 = require("obsidian");
+var import_obsidian4 = require("obsidian");
 
 // src/settings.ts
 var import_obsidian = require("obsidian");
@@ -6335,7 +6335,8 @@ var DEFAULT_SETTINGS = {
   embedApiKey: "",
   embedBaseUrl: "https://ark.cn-beijing.volces.com/api/v3",
   embedModelName: "ep-20240521-embed-xxx",
-  outputLanguage: "\u4E2D\u6587"
+  outputLanguage: "\u4E2D\u6587",
+  quickActions: ["init", "compile", "query", "followup", "status"]
 };
 var LLMWikiSettingTab = class extends import_obsidian.PluginSettingTab {
   constructor(app, plugin) {
@@ -6419,6 +6420,38 @@ var LLMWikiSettingTab = class extends import_obsidian.PluginSettingTab {
         })
       );
     }
+    containerEl.createEl("h3", { text: "Quick Actions" });
+    const actionOptions = {
+      init: "Init",
+      compile: "Compile",
+      query: "Query",
+      followup: "Follow-up",
+      authoritative: "Mark Authoritative",
+      status: "Status",
+      schema: "Schema Diff"
+    };
+    for (let i = 0; i < 5; i++) {
+      new import_obsidian.Setting(containerEl).setName(`Button ${i + 1}`).addDropdown((dropdown) => {
+        var _a3;
+        Object.entries(actionOptions).forEach(([value, label]) => dropdown.addOption(value, label));
+        dropdown.setValue((_a3 = this.plugin.settings.quickActions[i]) != null ? _a3 : "init").onChange(async (value) => {
+          this.plugin.settings.quickActions[i] = value;
+          await this.plugin.saveSettings();
+          this.plugin.onSettingsChanged();
+        });
+      });
+    }
+    containerEl.createEl("h3", { text: "Connection Test" });
+    new import_obsidian.Setting(containerEl).setName("Test Text Model").addButton(
+      (btn) => btn.setButtonText("Run").onClick(async () => {
+        await this.plugin.testTextModel();
+      })
+    );
+    new import_obsidian.Setting(containerEl).setName("Test Embedding Model").addButton(
+      (btn) => btn.setButtonText("Run").onClick(async () => {
+        await this.plugin.testEmbeddingModel();
+      })
+    );
   }
 };
 
@@ -6452,11 +6485,12 @@ var QueryModal = class extends import_obsidian2.Modal {
 };
 
 // src/main.ts
-var path10 = __toESM(require("path"));
-var fs12 = __toESM(require("fs"));
+var path12 = __toESM(require("path"));
+var fs15 = __toESM(require("fs"));
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/commands/init.js
-var import_node_path4 = __toESM(require("path"), 1);
+var import_node_path5 = __toESM(require("path"), 1);
+var import_promises3 = __toESM(require("fs/promises"), 1);
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/core/paths.js
 var import_node_path = __toESM(require("path"), 1);
@@ -6489,7 +6523,7 @@ function getProjectPaths(root = process.cwd()) {
     configFile,
     stateDir: import_node_path.default.join(root, ".llm-wiki"),
     indexFile: import_node_path.default.join(root, ".llm-wiki", "index.json"),
-    logFile: import_node_path.default.join(root, "wiki", "log.md")
+    logFile: import_node_path.default.join(wikiDir, "log.md")
   };
 }
 
@@ -6535,18 +6569,145 @@ var defaultConfigJson = (model = "YOUR_MODEL_NAME") => JSON.stringify({
   paths: { rawDir: "raw", wikiDir: "wiki", outputsDir: "outputs", stateDir: ".llm-wiki" },
   provider: { type: "volcengine", model, temperature: 0.2, maxTokens: 2e3 },
   compile: { concurrency: 2, language: "\u4E2D\u6587" },
-  query: { topK: 8 }
+  query: { topK: 8 },
+  export: { outDir: "export", includeAssets: false, assetsDir: "assets" },
+  lint: { maxDescriptionLength: 200, linkCheck: false }
 }, null, 2);
 
+// node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/schema/schema.js
+var import_node_fs2 = __toESM(require("fs"), 1);
+var import_node_path4 = __toESM(require("path"), 1);
+function normalizePath(p) {
+  return p.replace(/\\/g, "/").replace(/\/+$/g, "").replace(/^\.?\//, "");
+}
+function uniq(arr) {
+  return Array.from(new Set(arr));
+}
+function parseSchemaMarkdown(md) {
+  var _a3, _b;
+  const expectedPaths = [];
+  const expectedFiles = [];
+  const codeBlocks = (_a3 = md.match(/```[\s\S]*?```/g)) != null ? _a3 : [];
+  for (const blk of codeBlocks) {
+    const lines = blk.replace(/^```[a-zA-Z0-9-]*\n?/, "").replace(/```$/, "").split("\n");
+    const dirStack = [];
+    for (const line of lines) {
+      const idx = Math.max(line.indexOf("\u251C\u2500\u2500"), line.indexOf("\u2514\u2500\u2500"));
+      if (idx < 0)
+        continue;
+      const depth = Math.floor(idx / 4);
+      const m = line.match(/(?:├──|└──)\s*([^#]+?)(?:\s+#.*)?$/);
+      if (!m)
+        continue;
+      const raw = m[1].trim();
+      if (!raw)
+        continue;
+      const isDir = raw.endsWith("/");
+      const name = normalizePath(isDir ? raw.slice(0, -1) : raw);
+      if (!name)
+        continue;
+      if (isDir) {
+        dirStack.length = depth;
+        dirStack[depth] = name;
+        expectedPaths.push(normalizePath(dirStack.join("/")));
+      } else {
+        const parents = dirStack.slice(0, depth).filter(Boolean);
+        expectedFiles.push(normalizePath([...parents, name].join("/")));
+      }
+    }
+  }
+  const headingMatches = (_b = md.match(/\([^\n]*?\/[\)]/g)) != null ? _b : [];
+  for (const h of headingMatches) {
+    const m = h.match(/\(([^\)]+\/?)\)/);
+    if (!m)
+      continue;
+    const raw = m[1].trim();
+    if (!raw)
+      continue;
+    const isDir = raw.endsWith("/");
+    const normalized = normalizePath(isDir ? raw.slice(0, -1) : raw);
+    if (isDir)
+      expectedPaths.push(normalized);
+  }
+  for (const f of ["wiki/index.md", "wiki/log.md"]) {
+    if (md.includes(f))
+      expectedFiles.push(f);
+  }
+  return {
+    expectedPaths: uniq(expectedPaths),
+    expectedFiles: uniq(expectedFiles),
+    raw: md
+  };
+}
+function getProjectCapabilities(root = process.cwd()) {
+  const rels = [
+    { id: "raw", kind: "path", title: "raw \u76EE\u5F55" },
+    { id: "wiki", kind: "path", title: "wiki \u76EE\u5F55" },
+    { id: "wiki/summaries", kind: "path", title: "wiki/summaries \u76EE\u5F55" },
+    { id: "wiki/concepts", kind: "path", title: "wiki/concepts \u76EE\u5F55" },
+    { id: "wiki/authoritative", kind: "path", title: "wiki/authoritative \u76EE\u5F55" },
+    { id: "outputs", kind: "path", title: "outputs \u76EE\u5F55" },
+    { id: "prompts", kind: "path", title: "prompts \u76EE\u5F55" },
+    { id: "config", kind: "path", title: "config \u76EE\u5F55" },
+    { id: ".llm-wiki", kind: "path", title: ".llm-wiki \u76EE\u5F55" },
+    { id: "wiki/log.md", kind: "file", title: "wiki/log.md \u65E5\u5FD7" },
+    { id: "wiki/index.md", kind: "file", title: "wiki/index.md \u7D22\u5F15" }
+  ];
+  const existing = rels.filter((x) => import_node_fs2.default.existsSync(import_node_path4.default.join(root, x.id)));
+  return [
+    ...existing,
+    { id: "init", kind: "command", title: "CLI init" },
+    { id: "compile", kind: "command", title: "CLI compile" },
+    { id: "query", kind: "command", title: "CLI query" },
+    { id: "status", kind: "command", title: "CLI status" },
+    { id: "schema", kind: "command", title: "CLI schema" }
+  ];
+}
+function diffSchemaAgainstProject(schema, root = process.cwd()) {
+  const caps = getProjectCapabilities(root);
+  const capIndex = new Map(caps.map((c) => [c.id, c]));
+  const expectedItems = [
+    ...schema.expectedPaths.map((p) => ({
+      id: p,
+      kind: "path",
+      title: p
+    })),
+    ...schema.expectedFiles.map((f) => ({
+      id: f,
+      kind: "file",
+      title: f
+    }))
+  ];
+  const missing = expectedItems.filter((e) => !capIndex.has(e.id));
+  const expectedIndex = new Set(expectedItems.map((x) => x.id));
+  const extra = caps.filter((c) => (c.kind === "path" || c.kind === "file") && !expectedIndex.has(c.id));
+  const notes = ["sources\u2192summaries: compile \u65F6\u81EA\u52A8\u8FC1\u79FB wiki/sources \u5230 wiki/summaries\uFF08\u82E5 summaries \u4E0D\u5B58\u5728\uFF09"];
+  return { missing, extra, notes };
+}
+
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/commands/init.js
+async function createSchemaDirsIfAny(root) {
+  const schemaPath = import_node_path5.default.join(root, "SCHEMA.md");
+  if (!await fileExists(schemaPath))
+    return;
+  const md = await import_promises3.default.readFile(schemaPath, "utf-8");
+  const parsed = parseSchemaMarkdown(md);
+  for (const p of parsed.expectedPaths) {
+    const clean = p.replace(/\\/g, "/");
+    if (!clean || clean.includes(".."))
+      continue;
+    await ensureDir(import_node_path5.default.join(root, clean));
+  }
+}
 async function initCommand(opts) {
   const paths = getProjectPaths(opts.root);
   await ensureDir(paths.rawDir);
   await ensureDir(paths.wikiDir);
   await ensureDir(paths.outputsDir);
   await ensureDir(paths.promptsDir);
-  await ensureDir(import_node_path4.default.dirname(paths.configFile));
+  await ensureDir(import_node_path5.default.dirname(paths.configFile));
   await ensureDir(paths.stateDir);
+  await createSchemaDirsIfAny(paths.root);
   if (!await fileExists(paths.configFile)) {
     await writeFileAtomic(paths.configFile, defaultConfigJson(opts.model));
   }
@@ -6556,24 +6717,24 @@ async function initCommand(opts) {
   await appendLog(paths.logFile, "init", [
     `root: ${paths.root}`,
     "created: raw/, wiki/, outputs/, prompts/, config/, .llm-wiki/",
-    `config: ${import_node_path4.default.relative(paths.root, paths.configFile)}`
+    `config: ${import_node_path5.default.relative(paths.root, paths.configFile)}`
   ]);
 }
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/pipelines/compilePipeline.js
-var import_promises8 = __toESM(require("fs/promises"), 1);
-var import_node_path9 = __toESM(require("path"), 1);
+var import_promises10 = __toESM(require("fs/promises"), 1);
+var import_node_path11 = __toESM(require("path"), 1);
 
 // node_modules/.pnpm/globby@16.2.0/node_modules/globby/index.js
 var import_node_process2 = __toESM(require("process"), 1);
-var import_node_fs4 = __toESM(require("fs"), 1);
-var import_node_path8 = __toESM(require("path"), 1);
+var import_node_fs5 = __toESM(require("fs"), 1);
+var import_node_path9 = __toESM(require("path"), 1);
 var import_node_stream2 = require("stream");
 
 // node_modules/.pnpm/@sindresorhus+merge-streams@4.0.0/node_modules/@sindresorhus/merge-streams/index.js
 var import_node_events = require("events");
 var import_node_stream = require("stream");
-var import_promises3 = require("stream/promises");
+var import_promises4 = require("stream/promises");
 function mergeStreams(streams) {
   if (!Array.isArray(streams)) {
     throw new TypeError(`Expected an array, got \`${typeof streams}\`.`);
@@ -6667,7 +6828,7 @@ var onMergedStreamFinished = async (passThroughStream, streams, unpipeEvent) => 
 };
 var onMergedStreamEnd = async (passThroughStream, { signal }) => {
   try {
-    await (0, import_promises3.finished)(passThroughStream, { signal, cleanup: true });
+    await (0, import_promises4.finished)(passThroughStream, { signal, cleanup: true });
   } catch (error48) {
     errorOrAbortStream(passThroughStream, error48);
     throw error48;
@@ -6734,7 +6895,7 @@ var afterMergedStreamFinished = async (onFinished, stream, { signal }) => {
 };
 var onInputStreamEnd = async ({ passThroughStream, stream, streams, ended, aborted: aborted2, controller: { signal } }) => {
   try {
-    await (0, import_promises3.finished)(stream, {
+    await (0, import_promises4.finished)(stream, {
       signal,
       cleanup: true,
       readable: true,
@@ -6813,34 +6974,34 @@ var TEN_MEGABYTES_IN_BYTES = 10 * 1024 * 1024;
 
 // node_modules/.pnpm/globby@16.2.0/node_modules/globby/ignore.js
 var import_node_process = __toESM(require("process"), 1);
-var import_node_fs3 = __toESM(require("fs"), 1);
-var import_promises4 = __toESM(require("fs/promises"), 1);
-var import_node_path7 = __toESM(require("path"), 1);
+var import_node_fs4 = __toESM(require("fs"), 1);
+var import_promises5 = __toESM(require("fs/promises"), 1);
+var import_node_path8 = __toESM(require("path"), 1);
 var import_node_os2 = __toESM(require("os"), 1);
 var import_fast_glob2 = __toESM(require_out4(), 1);
 var import_ignore = __toESM(require_ignore(), 1);
 
 // node_modules/.pnpm/is-path-inside@4.0.0/node_modules/is-path-inside/index.js
-var import_node_path5 = __toESM(require("path"), 1);
+var import_node_path6 = __toESM(require("path"), 1);
 function isPathInside(childPath, parentPath) {
-  const relation = import_node_path5.default.relative(parentPath, childPath);
+  const relation = import_node_path6.default.relative(parentPath, childPath);
   return Boolean(
-    relation && relation !== ".." && !relation.startsWith(`..${import_node_path5.default.sep}`) && relation !== import_node_path5.default.resolve(childPath)
+    relation && relation !== ".." && !relation.startsWith(`..${import_node_path6.default.sep}`) && relation !== import_node_path6.default.resolve(childPath)
   );
 }
 
 // node_modules/.pnpm/slash@5.1.0/node_modules/slash/index.js
-function slash(path11) {
-  const isExtendedLengthPath = path11.startsWith("\\\\?\\");
+function slash(path13) {
+  const isExtendedLengthPath = path13.startsWith("\\\\?\\");
   if (isExtendedLengthPath) {
-    return path11;
+    return path13;
   }
-  return path11.replace(/\\/g, "/");
+  return path13.replace(/\\/g, "/");
 }
 
 // node_modules/.pnpm/globby@16.2.0/node_modules/globby/utilities.js
-var import_node_fs2 = __toESM(require("fs"), 1);
-var import_node_path6 = __toESM(require("path"), 1);
+var import_node_fs3 = __toESM(require("fs"), 1);
+var import_node_path7 = __toESM(require("path"), 1);
 var import_node_util2 = require("util");
 var import_fast_glob = __toESM(require_out4(), 1);
 var isNegativePattern = (pattern) => pattern[0] === "!";
@@ -6858,7 +7019,7 @@ var normalizeAbsolutePatternToRelative = (pattern) => {
 };
 var absolutePrefixesMatch = (positivePrefix, negativePrefix) => negativePrefix === positivePrefix;
 var getStaticAbsolutePathPrefix = (pattern) => {
-  if (!import_node_path6.default.isAbsolute(pattern)) {
+  if (!import_node_path7.default.isAbsolute(pattern)) {
     return void 0;
   }
   const staticSegments = [];
@@ -6944,13 +7105,13 @@ var adjustIgnorePatternsForParentDirectories = (patterns, ignorePatterns) => {
 };
 var getAsyncStatMethod = (fsImplementation) => {
   var _a3;
-  return (_a3 = bindFsMethod(fsImplementation == null ? void 0 : fsImplementation.promises, "stat")) != null ? _a3 : bindFsMethod(import_node_fs2.default.promises, "stat");
+  return (_a3 = bindFsMethod(fsImplementation == null ? void 0 : fsImplementation.promises, "stat")) != null ? _a3 : bindFsMethod(import_node_fs3.default.promises, "stat");
 };
 var getStatSyncMethod = (fsImplementation) => {
   if (fsImplementation) {
     return bindFsMethod(fsImplementation, "statSync");
   }
-  return bindFsMethod(import_node_fs2.default, "statSync");
+  return bindFsMethod(import_node_fs3.default, "statSync");
 };
 var pathHasGitDirectory = (stats) => {
   var _a3, _b;
@@ -6961,7 +7122,7 @@ var buildPathChain = (startPath, rootPath) => {
   let currentPath = startPath;
   chain.push(currentPath);
   while (currentPath !== rootPath) {
-    const parentPath = import_node_path6.default.dirname(currentPath);
+    const parentPath = import_node_path7.default.dirname(currentPath);
     if (parentPath === currentPath) {
       break;
     }
@@ -6972,7 +7133,7 @@ var buildPathChain = (startPath, rootPath) => {
 };
 var findGitRootInChain = async (paths, statMethod) => {
   for (const directory of paths) {
-    const gitPath = import_node_path6.default.join(directory, ".git");
+    const gitPath = import_node_path7.default.join(directory, ".git");
     try {
       const stats = await statMethod(gitPath);
       if (pathHasGitDirectory(stats)) {
@@ -6988,11 +7149,11 @@ var findGitRootSyncUncached = (cwd, fsImplementation) => {
   if (!statSyncMethod) {
     return void 0;
   }
-  const currentPath = import_node_path6.default.resolve(cwd);
-  const { root } = import_node_path6.default.parse(currentPath);
+  const currentPath = import_node_path7.default.resolve(cwd);
+  const { root } = import_node_path7.default.parse(currentPath);
   const chain = buildPathChain(currentPath, root);
   for (const directory of chain) {
-    const gitPath = import_node_path6.default.join(directory, ".git");
+    const gitPath = import_node_path7.default.join(directory, ".git");
     try {
       const stats = statSyncMethod(gitPath);
       if (pathHasGitDirectory(stats)) {
@@ -7014,8 +7175,8 @@ var findGitRootAsyncUncached = async (cwd, fsImplementation) => {
   if (!statMethod) {
     return findGitRootSync(cwd, fsImplementation);
   }
-  const currentPath = import_node_path6.default.resolve(cwd);
-  const { root } = import_node_path6.default.parse(currentPath);
+  const currentPath = import_node_path7.default.resolve(cwd);
+  const { root } = import_node_path7.default.parse(currentPath);
   const chain = buildPathChain(currentPath, root);
   return findGitRootInChain(chain, statMethod);
 };
@@ -7026,8 +7187,8 @@ var findGitRoot = async (cwd, fsImplementation) => {
   return findGitRootAsyncUncached(cwd, fsImplementation);
 };
 var isWithinGitRoot = (gitRoot, cwd) => {
-  const resolvedGitRoot = import_node_path6.default.resolve(gitRoot);
-  const resolvedCwd = import_node_path6.default.resolve(cwd);
+  const resolvedGitRoot = import_node_path7.default.resolve(gitRoot);
+  const resolvedCwd = import_node_path7.default.resolve(cwd);
   return resolvedCwd === resolvedGitRoot || isPathInside(resolvedCwd, resolvedGitRoot);
 };
 var getParentGitignorePaths = (gitRoot, cwd) => {
@@ -7043,8 +7204,8 @@ var getParentGitignorePaths = (gitRoot, cwd) => {
   if (!isWithinGitRoot(gitRoot, cwd)) {
     return [];
   }
-  const chain = buildPathChain(import_node_path6.default.resolve(cwd), import_node_path6.default.resolve(gitRoot));
-  return [...chain].reverse().map((directory) => import_node_path6.default.join(directory, ".gitignore"));
+  const chain = buildPathChain(import_node_path7.default.resolve(cwd), import_node_path7.default.resolve(gitRoot));
+  return [...chain].reverse().map((directory) => import_node_path7.default.join(directory, ".gitignore"));
 };
 var convertPatternsForFastGlob = (patterns, usingGitRoot, normalizeDirectoryPatternForFastGlob2) => {
   if (usingGitRoot) {
@@ -7077,11 +7238,11 @@ var GITIGNORE_FILES_PATTERN = "**/.gitignore";
 var MAX_INCLUDE_DEPTH = 10;
 var getReadFileMethod = (fsImplementation) => {
   var _a3, _b;
-  return (_b = (_a3 = bindFsMethod(fsImplementation == null ? void 0 : fsImplementation.promises, "readFile")) != null ? _a3 : bindFsMethod(import_promises4.default, "readFile")) != null ? _b : promisifyFsMethod(fsImplementation, "readFile");
+  return (_b = (_a3 = bindFsMethod(fsImplementation == null ? void 0 : fsImplementation.promises, "readFile")) != null ? _a3 : bindFsMethod(import_promises5.default, "readFile")) != null ? _b : promisifyFsMethod(fsImplementation, "readFile");
 };
 var getReadFileSyncMethod = (fsImplementation) => {
   var _a3;
-  return (_a3 = bindFsMethod(fsImplementation, "readFileSync")) != null ? _a3 : bindFsMethod(import_node_fs3.default, "readFileSync");
+  return (_a3 = bindFsMethod(fsImplementation, "readFileSync")) != null ? _a3 : bindFsMethod(import_node_fs4.default, "readFileSync");
 };
 var shouldSkipIgnoreFileError = (error48, suppressErrors) => {
   if (!error48) {
@@ -7168,21 +7329,21 @@ var applyBaseToPattern = (pattern, base) => {
   const hasNonTrailingSlash = slashIndex !== -1 && slashIndex !== cleanPattern.length - 1;
   let result;
   if (!hasNonTrailingSlash) {
-    result = import_node_path7.default.posix.join(base, "**", cleanPattern);
+    result = import_node_path8.default.posix.join(base, "**", cleanPattern);
   } else if (cleanPattern.startsWith("/")) {
-    result = import_node_path7.default.posix.join(base, cleanPattern.slice(1));
+    result = import_node_path8.default.posix.join(base, cleanPattern.slice(1));
   } else {
-    result = import_node_path7.default.posix.join(base, cleanPattern);
+    result = import_node_path8.default.posix.join(base, cleanPattern);
   }
   return isNegative ? "!" + result : result;
 };
 var parseIgnoreFile = (file2, cwd) => {
-  const base = slash(import_node_path7.default.relative(cwd, import_node_path7.default.dirname(file2.filePath)));
+  const base = slash(import_node_path8.default.relative(cwd, import_node_path8.default.dirname(file2.filePath)));
   return file2.content.split(/\r?\n/).filter((line) => line && !line.startsWith("#")).map((pattern) => applyBaseToPattern(pattern, base));
 };
 var toRelativePath = (fileOrDirectory, cwd) => {
-  if (import_node_path7.default.isAbsolute(fileOrDirectory)) {
-    const relativePath = import_node_path7.default.relative(cwd, fileOrDirectory);
+  if (import_node_path8.default.isAbsolute(fileOrDirectory)) {
+    const relativePath = import_node_path8.default.relative(cwd, fileOrDirectory);
     if (relativePath && !isPathInside(fileOrDirectory, cwd)) {
       return void 0;
     }
@@ -7199,12 +7360,12 @@ var toRelativePath = (fileOrDirectory, cwd) => {
 var notIgnored = { ignored: false, unignored: false };
 var createIgnoreMatcher = (patterns, cwd, baseDir) => {
   const ignores = (0, import_ignore.default)().add(patterns);
-  const resolvedCwd = import_node_path7.default.normalize(import_node_path7.default.resolve(cwd));
-  const resolvedBaseDir = import_node_path7.default.normalize(import_node_path7.default.resolve(baseDir));
+  const resolvedCwd = import_node_path8.default.normalize(import_node_path8.default.resolve(cwd));
+  const resolvedBaseDir = import_node_path8.default.normalize(import_node_path8.default.resolve(baseDir));
   return (fileOrDirectory) => {
     fileOrDirectory = toPath(fileOrDirectory);
     const hasTrailingSeparator = /[/\\]$/.test(fileOrDirectory);
-    const normalizedPath = import_node_path7.default.normalize(import_node_path7.default.resolve(fileOrDirectory));
+    const normalizedPath = import_node_path8.default.normalize(import_node_path8.default.resolve(fileOrDirectory));
     if (normalizedPath === resolvedCwd) {
       return notIgnored;
     }
@@ -7215,8 +7376,8 @@ var createIgnoreMatcher = (patterns, cwd, baseDir) => {
     if (!relativePath) {
       return notIgnored;
     }
-    if (hasTrailingSeparator && !relativePath.endsWith(import_node_path7.default.sep)) {
-      relativePath += import_node_path7.default.sep;
+    if (hasTrailingSeparator && !relativePath.endsWith(import_node_path8.default.sep)) {
+      relativePath += import_node_path8.default.sep;
     }
     return ignores.test(slash(relativePath));
   };
@@ -7276,16 +7437,16 @@ var parseGitConfigValue = (value) => {
 var resolveConfigPath = (filePath, configPath) => {
   if (configPath.startsWith("~/")) {
     const homeDirectory = import_node_os2.default.homedir();
-    const resolved = import_node_path7.default.join(homeDirectory, configPath.slice(2));
+    const resolved = import_node_path8.default.join(homeDirectory, configPath.slice(2));
     if (!isPathInside(resolved, homeDirectory)) {
-      return import_node_path7.default.join(homeDirectory, ".globby-invalid-path-traversal");
+      return import_node_path8.default.join(homeDirectory, ".globby-invalid-path-traversal");
     }
     return resolved;
   }
-  if (import_node_path7.default.isAbsolute(configPath)) {
+  if (import_node_path8.default.isAbsolute(configPath)) {
     return configPath;
   }
-  return import_node_path7.default.resolve(import_node_path7.default.dirname(filePath), configPath);
+  return import_node_path8.default.resolve(import_node_path8.default.dirname(filePath), configPath);
 };
 var parseGitConfigSection = (line) => {
   if (!line.startsWith("[")) {
@@ -7336,10 +7497,10 @@ var parseIncludeIfCondition = (section) => {
 };
 var normalizeGitConfigConditionPattern = (pattern, configFilePath) => {
   if (pattern.startsWith("~/")) {
-    pattern = import_node_path7.default.join(import_node_os2.default.homedir(), pattern.slice(2));
+    pattern = import_node_path8.default.join(import_node_os2.default.homedir(), pattern.slice(2));
   } else if (pattern.startsWith("./")) {
-    pattern = import_node_path7.default.resolve(import_node_path7.default.dirname(configFilePath), pattern.slice(2));
-  } else if (!import_node_path7.default.isAbsolute(pattern)) {
+    pattern = import_node_path8.default.resolve(import_node_path8.default.dirname(configFilePath), pattern.slice(2));
+  } else if (!import_node_path8.default.isAbsolute(pattern)) {
     pattern = `**/${pattern}`;
   }
   if (pattern.endsWith("/")) {
@@ -7403,7 +7564,7 @@ var matchesIncludeIfCondition = (condition, gitDirectory, configFilePath) => {
   const pattern = normalizeGitConfigConditionPattern(rawPattern.trim(), configFilePath);
   const isCaseInsensitive = keyword.toLowerCase() === "gitdir/i";
   const regularExpression = gitConfigGlobToRegex(pattern, isCaseInsensitive ? "i" : void 0);
-  const normalizedGitDirectory = slash(import_node_path7.default.resolve(gitDirectory));
+  const normalizedGitDirectory = slash(import_node_path8.default.resolve(gitDirectory));
   return regularExpression.test(normalizedGitDirectory);
 };
 var shouldIncludeConfigSection = (section, gitDirectory, configFilePath) => {
@@ -7456,7 +7617,7 @@ var readGitConfigFile = (normalizedPath, readMethod, suppressErrors) => {
 };
 var getExcludesFileFromGitConfigSync = (filePath, readFileSync2, gitDirectory, options = {}) => {
   const { suppressErrors, includeStack = /* @__PURE__ */ new Set(), depth = 0 } = options;
-  const normalizedPath = import_node_path7.default.resolve(filePath);
+  const normalizedPath = import_node_path8.default.resolve(filePath);
   if (includeStack.has(normalizedPath)) {
     return void 0;
   }
@@ -7481,7 +7642,7 @@ var getExcludesFileFromGitConfigSync = (filePath, readFileSync2, gitDirectory, o
 };
 var getExcludesFileFromGitConfigAsync = async (filePath, readFile, gitDirectory, options = {}) => {
   const { suppressErrors, includeStack = /* @__PURE__ */ new Set(), depth = 0 } = options;
-  const normalizedPath = import_node_path7.default.resolve(filePath);
+  const normalizedPath = import_node_path8.default.resolve(filePath);
   if (includeStack.has(normalizedPath)) {
     return void 0;
   }
@@ -7514,13 +7675,13 @@ var resolveGitDirectoryFromFile = (gitFilePath, content) => {
   if (!match) {
     return gitFilePath;
   }
-  return import_node_path7.default.resolve(import_node_path7.default.dirname(gitFilePath), match[1]);
+  return import_node_path8.default.resolve(import_node_path8.default.dirname(gitFilePath), match[1]);
 };
 var getGitDirectorySync = (gitRoot, readFileSync2) => {
   if (!gitRoot) {
     return void 0;
   }
-  const gitFilePath = import_node_path7.default.join(gitRoot, ".git");
+  const gitFilePath = import_node_path8.default.join(gitRoot, ".git");
   try {
     return resolveGitDirectoryFromFile(gitFilePath, readFileSync2(gitFilePath, "utf8"));
   } catch (e) {
@@ -7531,25 +7692,25 @@ var getGitDirectoryAsync = async (gitRoot, readFile) => {
   if (!gitRoot) {
     return void 0;
   }
-  const gitFilePath = import_node_path7.default.join(gitRoot, ".git");
+  const gitFilePath = import_node_path8.default.join(gitRoot, ".git");
   try {
     return resolveGitDirectoryFromFile(gitFilePath, await readFile(gitFilePath, "utf8"));
   } catch (e) {
     return gitFilePath;
   }
 };
-var getXdgConfigHome = () => import_node_process.default.env.XDG_CONFIG_HOME || import_node_path7.default.join(import_node_os2.default.homedir(), ".config");
+var getXdgConfigHome = () => import_node_process.default.env.XDG_CONFIG_HOME || import_node_path8.default.join(import_node_os2.default.homedir(), ".config");
 var getGitConfigPaths = () => {
   if ("GIT_CONFIG_GLOBAL" in import_node_process.default.env) {
     const value = import_node_process.default.env.GIT_CONFIG_GLOBAL;
     return value ? [value] : [];
   }
   return [
-    import_node_path7.default.join(getXdgConfigHome(), "git", "config"),
-    import_node_path7.default.join(import_node_os2.default.homedir(), ".gitconfig")
+    import_node_path8.default.join(getXdgConfigHome(), "git", "config"),
+    import_node_path8.default.join(import_node_os2.default.homedir(), ".gitconfig")
   ];
 };
-var getDefaultGlobalGitignorePath = () => import_node_path7.default.join(getXdgConfigHome(), "git", "ignore");
+var getDefaultGlobalGitignorePath = () => import_node_path8.default.join(getXdgConfigHome(), "git", "ignore");
 var resolveExcludesFilePath = (excludesFileConfig) => {
   if ((excludesFileConfig == null ? void 0 : excludesFileConfig.value) === "") {
     return void 0;
@@ -7614,7 +7775,7 @@ var getGlobalGitignoreFileAsync = async (options = {}) => {
   }
 };
 var buildGlobalMatcher = (globalIgnoreFile, cwd, rootDirectory = cwd) => {
-  const patterns = parseIgnoreFile(globalIgnoreFile, import_node_path7.default.dirname(globalIgnoreFile.filePath));
+  const patterns = parseIgnoreFile(globalIgnoreFile, import_node_path8.default.dirname(globalIgnoreFile.filePath));
   return createIgnoreMatcher(patterns, cwd, rootDirectory);
 };
 var collectIgnoreFileArtifactsAsync = async (patterns, options, includeParentIgnoreFiles) => {
@@ -7664,31 +7825,31 @@ var getStatMethod = (fsImplementation) => {
   if (fsImplementation) {
     return (_a3 = bindFsMethod(fsImplementation.promises, "stat")) != null ? _a3 : promisifyFsMethod(fsImplementation, "stat");
   }
-  return bindFsMethod(import_node_fs4.default.promises, "stat");
+  return bindFsMethod(import_node_fs5.default.promises, "stat");
 };
 var getStatSyncMethod2 = (fsImplementation) => {
   var _a3;
-  return (_a3 = bindFsMethod(fsImplementation, "statSync")) != null ? _a3 : bindFsMethod(import_node_fs4.default, "statSync");
+  return (_a3 = bindFsMethod(fsImplementation, "statSync")) != null ? _a3 : bindFsMethod(import_node_fs5.default, "statSync");
 };
-var isDirectory = async (path11, fsImplementation) => {
+var isDirectory = async (path13, fsImplementation) => {
   try {
-    const stats = await getStatMethod(fsImplementation)(path11);
+    const stats = await getStatMethod(fsImplementation)(path13);
     return stats.isDirectory();
   } catch (e) {
     return false;
   }
 };
-var isDirectorySync = (path11, fsImplementation) => {
+var isDirectorySync = (path13, fsImplementation) => {
   try {
-    const stats = getStatSyncMethod2(fsImplementation)(path11);
+    const stats = getStatSyncMethod2(fsImplementation)(path13);
     return stats.isDirectory();
   } catch (e) {
     return false;
   }
 };
 var normalizePathForDirectoryGlob = (filePath, cwd) => {
-  const path11 = isNegativePattern(filePath) ? filePath.slice(1) : filePath;
-  return import_node_path8.default.isAbsolute(path11) ? path11 : import_node_path8.default.join(cwd, path11);
+  const path13 = isNegativePattern(filePath) ? filePath.slice(1) : filePath;
+  return import_node_path9.default.isAbsolute(path13) ? path13 : import_node_path9.default.join(cwd, path13);
 };
 var shouldExpandGlobstarDirectory = (pattern) => {
   const match = pattern == null ? void 0 : pattern.match(/\*\*\/([^/]+)$/);
@@ -7697,12 +7858,12 @@ var shouldExpandGlobstarDirectory = (pattern) => {
   }
   const dirname = match[1];
   const hasWildcards = /[*?[\]{}]/.test(dirname);
-  const hasExtension = import_node_path8.default.extname(dirname) && !dirname.startsWith(".");
+  const hasExtension = import_node_path9.default.extname(dirname) && !dirname.startsWith(".");
   return !hasWildcards && !hasExtension;
 };
 var getDirectoryGlob = ({ directoryPath, files, extensions }) => {
   const extensionGlob = (extensions == null ? void 0 : extensions.length) > 0 ? `.${extensions.length > 1 ? `{${extensions.join(",")}}` : extensions[0]}` : "";
-  return files ? files.map((file2) => import_node_path8.default.posix.join(directoryPath, `**/${import_node_path8.default.extname(file2) ? file2 : `${file2}${extensionGlob}`}`)) : [import_node_path8.default.posix.join(directoryPath, `**${extensionGlob ? `/*${extensionGlob}` : ""}`)];
+  return files ? files.map((file2) => import_node_path9.default.posix.join(directoryPath, `**/${import_node_path9.default.extname(file2) ? file2 : `${file2}${extensionGlob}`}`)) : [import_node_path9.default.posix.join(directoryPath, `**${extensionGlob ? `/*${extensionGlob}` : ""}`)];
 };
 var directoryToGlob = async (directoryPaths, {
   cwd = import_node_process2.default.cwd(),
@@ -7738,7 +7899,7 @@ var toPatternsArray = (patterns) => {
   assertPatternsInput(patterns);
   return patterns;
 };
-var checkCwdOption = (cwd, fsImplementation = import_node_fs4.default) => {
+var checkCwdOption = (cwd, fsImplementation = import_node_fs5.default) => {
   if (!cwd || !fsImplementation.statSync) {
     return;
   }
@@ -7774,9 +7935,9 @@ var getIgnoreFilesPatterns = (options) => {
   }
   return patterns;
 };
-var isPathIgnored = (matcher, globalMatcher, path11) => {
-  const globalResult = globalMatcher ? globalMatcher(path11) : void 0;
-  const result = matcher ? matcher(path11) : void 0;
+var isPathIgnored = (matcher, globalMatcher, path13) => {
+  const globalResult = globalMatcher ? globalMatcher(path13) : void 0;
+  const result = matcher ? matcher(path13) : void 0;
   if (result == null ? void 0 : result.unignored) {
     return false;
   }
@@ -7785,11 +7946,11 @@ var isPathIgnored = (matcher, globalMatcher, path11) => {
 var hasIgnoredAncestorDirectory = (matcher, globalMatcher, file2) => {
   let currentPath = file2;
   while (true) {
-    const parentDirectory = import_node_path8.default.dirname(currentPath);
+    const parentDirectory = import_node_path9.default.dirname(currentPath);
     if (parentDirectory === currentPath) {
       return false;
     }
-    if (isPathIgnored(matcher, globalMatcher, `${parentDirectory}${import_node_path8.default.sep}`)) {
+    if (isPathIgnored(matcher, globalMatcher, `${parentDirectory}${import_node_path9.default.sep}`)) {
       return true;
     }
     currentPath = parentDirectory;
@@ -7877,7 +8038,7 @@ var createPathResolver = (cwd) => {
       if (pathCache.size > 1e4) {
         pathCache.clear();
       }
-      absolutePath = import_node_path8.default.isAbsolute(pathKey) ? pathKey : import_node_path8.default.resolve(basePath, pathKey);
+      absolutePath = import_node_path9.default.isAbsolute(pathKey) ? pathKey : import_node_path9.default.resolve(basePath, pathKey);
       pathCache.set(pathKey, absolutePath);
     }
     return absolutePath;
@@ -7931,11 +8092,11 @@ var createFilterFunctionAsync = (isIgnored, cwd, fsImplementation) => {
     if (!isIgnored) {
       return true;
     }
-    const absolutePath = resolveAbsolutePath(import_node_path8.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult));
+    const absolutePath = resolveAbsolutePath(import_node_path9.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult));
     if (isIgnored(absolutePath)) {
       return false;
     }
-    return !(await isDirectoryEntry(absolutePath) && isIgnored(`${absolutePath}${import_node_path8.default.sep}`));
+    return !(await isDirectoryEntry(absolutePath) && isIgnored(`${absolutePath}${import_node_path9.default.sep}`));
   };
 };
 var createFilterFunction = (isIgnored, cwd, fsImplementation) => {
@@ -7944,7 +8105,7 @@ var createFilterFunction = (isIgnored, cwd, fsImplementation) => {
   const isDirectoryEntry = createDirectoryCheck(getStatSyncMethod2(fsImplementation));
   return (fastGlobResult) => {
     var _a3;
-    const pathKey = import_node_path8.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult);
+    const pathKey = import_node_path9.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult);
     if (seen.has(pathKey)) {
       return false;
     }
@@ -7953,7 +8114,7 @@ var createFilterFunction = (isIgnored, cwd, fsImplementation) => {
       if (isIgnored(absolutePath)) {
         return false;
       }
-      if (isDirectoryEntry(absolutePath) && isIgnored(`${absolutePath}${import_node_path8.default.sep}`)) {
+      if (isDirectoryEntry(absolutePath) && isIgnored(`${absolutePath}${import_node_path9.default.sep}`)) {
         return false;
       }
     }
@@ -7971,7 +8132,7 @@ var unionFastGlobResultsAsync = async (results, filter) => {
     if (!matches[index]) {
       return false;
     }
-    const pathKey = import_node_path8.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult);
+    const pathKey = import_node_path9.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult);
     if (seen.has(pathKey)) {
       return false;
     }
@@ -8108,7 +8269,7 @@ var globbyStream = normalizeArgumentsSync((patterns, options) => {
     }
     const streams = tasks.map((task) => import_fast_glob3.default.stream(task.patterns, task.options));
     for await (const fastGlobResult of mergeStreams(streams)) {
-      const pathKey = import_node_path8.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult);
+      const pathKey = import_node_path9.default.normalize((_a3 = fastGlobResult.path) != null ? _a3 : fastGlobResult);
       if (!seen.has(pathKey) && await filter(fastGlobResult)) {
         seen.add(pathKey);
         yield fastGlobResult;
@@ -8124,14 +8285,14 @@ var { convertPathToPattern } = import_fast_glob3.default;
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/core/hash.js
 var import_node_crypto = __toESM(require("crypto"), 1);
-var import_promises5 = __toESM(require("fs/promises"), 1);
+var import_promises6 = __toESM(require("fs/promises"), 1);
 async function sha256File(filePath) {
-  const buf = await import_promises5.default.readFile(filePath);
+  const buf = await import_promises6.default.readFile(filePath);
   return import_node_crypto.default.createHash("sha256").update(buf).digest("hex");
 }
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/core/config.js
-var import_promises6 = __toESM(require("fs/promises"), 1);
+var import_promises7 = __toESM(require("fs/promises"), 1);
 
 // node_modules/.pnpm/zod@4.3.6/node_modules/zod/v4/classic/external.js
 var external_exports = {};
@@ -8902,10 +9063,10 @@ function mergeDefs(...defs) {
 function cloneDef(schema) {
   return mergeDefs(schema._zod.def);
 }
-function getElementAtPath(obj, path11) {
-  if (!path11)
+function getElementAtPath(obj, path13) {
+  if (!path13)
     return obj;
-  return path11.reduce((acc, key) => acc == null ? void 0 : acc[key], obj);
+  return path13.reduce((acc, key) => acc == null ? void 0 : acc[key], obj);
 }
 function promiseAllObject(promisesObj) {
   const keys = Object.keys(promisesObj);
@@ -9290,12 +9451,12 @@ function aborted(x, startIndex = 0) {
   }
   return false;
 }
-function prefixIssues(path11, issues) {
+function prefixIssues(path13, issues) {
   return issues.map((iss) => {
     var _a4;
     var _a3;
     (_a4 = (_a3 = iss).path) != null ? _a4 : _a3.path = [];
-    iss.path.unshift(path11);
+    iss.path.unshift(path13);
     return iss;
   });
 }
@@ -9479,7 +9640,7 @@ function formatError(error48, mapper = (issue2) => issue2.message) {
 }
 function treeifyError(error48, mapper = (issue2) => issue2.message) {
   const result = { errors: [] };
-  const processError = (error49, path11 = []) => {
+  const processError = (error49, path13 = []) => {
     var _a4, _b2, _c, _d;
     var _a3, _b;
     for (const issue2 of error49.issues) {
@@ -9490,7 +9651,7 @@ function treeifyError(error48, mapper = (issue2) => issue2.message) {
       } else if (issue2.code === "invalid_element") {
         processError({ issues: issue2.issues }, issue2.path);
       } else {
-        const fullpath = [...path11, ...issue2.path];
+        const fullpath = [...path13, ...issue2.path];
         if (fullpath.length === 0) {
           result.errors.push(mapper(issue2));
           continue;
@@ -9522,8 +9683,8 @@ function treeifyError(error48, mapper = (issue2) => issue2.message) {
 }
 function toDotPath(_path) {
   const segs = [];
-  const path11 = _path.map((seg) => typeof seg === "object" ? seg.key : seg);
-  for (const seg of path11) {
+  const path13 = _path.map((seg) => typeof seg === "object" ? seg.key : seg);
+  for (const seg of path13) {
     if (typeof seg === "number")
       segs.push(`[${seg}]`);
     else if (typeof seg === "symbol")
@@ -21591,13 +21752,13 @@ function resolveRef(ref, ctx) {
   if (!ref.startsWith("#")) {
     throw new Error("External $ref is not supported, only local refs (#/...) are allowed");
   }
-  const path11 = ref.slice(1).split("/").filter(Boolean);
-  if (path11.length === 0) {
+  const path13 = ref.slice(1).split("/").filter(Boolean);
+  if (path13.length === 0) {
     return ctx.rootSchema;
   }
   const defsKey = ctx.version === "draft-2020-12" ? "$defs" : "definitions";
-  if (path11[0] === defsKey) {
-    const key = path11[1];
+  if (path13[0] === defsKey) {
+    const key = path13[1];
     if (!key || !ctx.defs[key]) {
       throw new Error(`Reference not found: ${ref}`);
     }
@@ -22029,6 +22190,15 @@ var CompileConfigSchema = external_exports.object({
 var QueryConfigSchema = external_exports.object({
   topK: external_exports.number().int().min(1).max(50).default(8)
 });
+var ExportConfigSchema = external_exports.object({
+  outDir: external_exports.string().default("export"),
+  includeAssets: external_exports.boolean().default(false),
+  assetsDir: external_exports.string().default("assets")
+});
+var LintConfigSchema = external_exports.object({
+  maxDescriptionLength: external_exports.number().int().min(1).max(1e3).default(200),
+  linkCheck: external_exports.boolean().default(false)
+});
 var ConfigSchema = external_exports.object({
   paths: PathsConfigSchema.default({
     rawDir: "raw",
@@ -22039,17 +22209,19 @@ var ConfigSchema = external_exports.object({
   provider: ProviderConfigSchema,
   embedding: EmbeddingConfigSchema.optional(),
   compile: CompileConfigSchema.default({ concurrency: 2, language: "\u4E2D\u6587" }),
-  query: QueryConfigSchema.default({ topK: 8 })
+  query: QueryConfigSchema.default({ topK: 8 }),
+  export: ExportConfigSchema.optional(),
+  lint: LintConfigSchema.optional()
 });
 async function loadConfig(root = process.cwd()) {
   const paths = getProjectPaths(root);
-  const raw = await import_promises6.default.readFile(paths.configFile, "utf-8");
+  const raw = await import_promises7.default.readFile(paths.configFile, "utf-8");
   const json2 = JSON.parse(raw);
   return ConfigSchema.parse(json2);
 }
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/core/state.js
-var import_promises7 = __toESM(require("fs/promises"), 1);
+var import_promises8 = __toESM(require("fs/promises"), 1);
 var IndexSchema = external_exports.object({
   version: external_exports.number().default(1),
   raw: external_exports.record(external_exports.string(), external_exports.object({
@@ -22062,7 +22234,7 @@ var IndexSchema = external_exports.object({
 async function loadIndex(indexFile) {
   if (!await fileExists(indexFile))
     return IndexSchema.parse({ version: 1, raw: {} });
-  const raw = await import_promises7.default.readFile(indexFile, "utf-8");
+  const raw = await import_promises8.default.readFile(indexFile, "utf-8");
   return IndexSchema.parse(JSON.parse(raw));
 }
 async function saveIndex(indexFile, state) {
@@ -22072,7 +22244,7 @@ async function loadEmbeddings(file2) {
   if (!await fileExists(file2))
     return {};
   try {
-    const raw = await import_promises7.default.readFile(file2, "utf-8");
+    const raw = await import_promises8.default.readFile(file2, "utf-8");
     return JSON.parse(raw);
   } catch (e) {
     return {};
@@ -22080,6 +22252,44 @@ async function loadEmbeddings(file2) {
 }
 async function saveEmbeddings(file2, state) {
   await writeFileAtomic(file2, JSON.stringify(state));
+}
+
+// node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/core/indexFile.js
+var import_promises9 = __toESM(require("fs/promises"), 1);
+var import_node_path10 = __toESM(require("path"), 1);
+function toLink(p) {
+  return `[[${p.replace(/\.md$/, "")}]]`;
+}
+async function updateWikiIndex(opts) {
+  var _a3;
+  const indexAbs = import_node_path10.default.join(opts.root, opts.wikiDir, "index.md");
+  const sections = [
+    { title: "Summaries", items: opts.summaries },
+    { title: "Concepts", items: opts.concepts },
+    { title: "Authoritative", items: opts.authoritative },
+    { title: "Outputs", items: opts.outputs }
+  ];
+  const header = "# Wiki Index\n\n";
+  const existing = await fileExists(indexAbs) ? await import_promises9.default.readFile(indexAbs, "utf-8") : header;
+  const normalized = /* @__PURE__ */ new Map();
+  for (const sec of sections)
+    normalized.set(sec.title, new Set(sec.items.map((x) => x.replace(/\\/g, "/"))));
+  const out = [header.trimEnd(), ""];
+  for (const sec of sections) {
+    out.push(`## ${sec.title}`);
+    out.push("");
+    const uniq2 = Array.from((_a3 = normalized.get(sec.title)) != null ? _a3 : []).sort();
+    if (uniq2.length === 0)
+      out.push("- (none)");
+    else
+      for (const item of uniq2)
+        out.push(`- ${toLink(item)}`);
+    out.push("");
+  }
+  const next = out.join("\n");
+  if (existing.trim() === next.trim())
+    return;
+  await writeFileAtomic(indexAbs, next);
 }
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/provider/volcengine.js
@@ -22287,9 +22497,42 @@ ${newSources}
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/pipelines/compilePipeline.js
 function wikiPathForRaw(root, rawDir, wikiDir, rawAbs) {
-  const rel = import_node_path9.default.relative(import_node_path9.default.resolve(root, rawDir), rawAbs);
+  const rel = import_node_path11.default.relative(import_node_path11.default.resolve(root, rawDir), rawAbs);
   const noExt = rel.replace(/\.(md|txt)$/i, "");
-  return import_node_path9.default.join(import_node_path9.default.resolve(root, wikiDir), "sources", `${noExt}.md`);
+  return import_node_path11.default.join(import_node_path11.default.resolve(root, wikiDir), "summaries", `${noExt}.md`);
+}
+async function migrateSourcesToSummaries(wikiDirAbs) {
+  const sourcesDir = import_node_path11.default.join(wikiDirAbs, "sources");
+  const summariesDir = import_node_path11.default.join(wikiDirAbs, "summaries");
+  if (await fileExists(summariesDir))
+    return;
+  if (!await fileExists(sourcesDir))
+    return;
+  const moveDirRecursive = async (from, to) => {
+    await import_promises10.default.mkdir(to, { recursive: true });
+    const entries = await import_promises10.default.readdir(from, { withFileTypes: true });
+    for (const ent of entries) {
+      const src = import_node_path11.default.join(from, ent.name);
+      const dst = import_node_path11.default.join(to, ent.name);
+      if (ent.isDirectory()) {
+        await moveDirRecursive(src, dst);
+        await import_promises10.default.rmdir(src);
+        continue;
+      }
+      try {
+        await import_promises10.default.rename(src, dst);
+      } catch (e) {
+        await import_promises10.default.copyFile(src, dst);
+        await import_promises10.default.unlink(src);
+      }
+    }
+  };
+  try {
+    await import_promises10.default.rename(sourcesDir, summariesDir);
+  } catch (e) {
+    await moveDirRecursive(sourcesDir, summariesDir);
+    await import_promises10.default.rmdir(sourcesDir);
+  }
 }
 async function compilePipeline(opts) {
   var _a3, _b;
@@ -22297,9 +22540,10 @@ async function compilePipeline(opts) {
   const paths = getProjectPaths(root);
   const cfg = await loadConfig(root);
   const index = await loadIndex(paths.indexFile);
-  const embeddingsFile = import_node_path9.default.join(paths.stateDir, "embeddings.json");
+  const embeddingsFile = import_node_path11.default.join(paths.stateDir, "embeddings.json");
   const embeddingsState = await loadEmbeddings(embeddingsFile);
-  const rawDir = import_node_path9.default.resolve(root, cfg.paths.rawDir);
+  await migrateSourcesToSummaries(import_node_path11.default.resolve(root, cfg.paths.wikiDir));
+  const rawDir = import_node_path11.default.resolve(root, cfg.paths.rawDir);
   const rawFiles = await globby(["**/*.md", "**/*.txt"], { cwd: rawDir, absolute: true });
   const textProvider = new VolcengineProvider({
     model: cfg.provider.model,
@@ -22321,20 +22565,20 @@ async function compilePipeline(opts) {
   const updated = [];
   const errors = [];
   for (const f of rawFiles) {
-    const relKey = import_node_path9.default.relative(root, f).replace(/\\/g, "/");
+    const relKey = import_node_path11.default.relative(root, f).replace(/\\/g, "/");
     const sha = await sha256File(f);
     const prev = index.raw[relKey];
     const needs = !!opts.full || !prev || prev.sha256 !== sha || prev.status === "error";
     if (!needs) {
       const wikiAbs = wikiPathForRaw(root, cfg.paths.rawDir, cfg.paths.wikiDir, f);
-      const wikiRel = import_node_path9.default.relative(root, wikiAbs).replace(/\\/g, "/");
+      const wikiRel = import_node_path11.default.relative(root, wikiAbs).replace(/\\/g, "/");
       if (await fileExists(wikiAbs)) {
         const wikiSha = await sha256File(wikiAbs);
         const prevEmb = embeddingsState[wikiRel];
         if (!prevEmb || prevEmb.hash !== wikiSha) {
           if (embedProvider) {
             try {
-              const wikiContent = await import_promises8.default.readFile(wikiAbs, "utf-8");
+              const wikiContent = await import_promises10.default.readFile(wikiAbs, "utf-8");
               const contentForEmbedding = wikiContent.slice(0, 1500);
               const vectors = await embedProvider.generateEmbeddings([contentForEmbedding]);
               if (vectors && vectors.length > 0) {
@@ -22351,9 +22595,9 @@ async function compilePipeline(opts) {
       continue;
     }
     try {
-      const rawText = await import_promises8.default.readFile(f, "utf-8");
+      const rawText = await import_promises10.default.readFile(f, "utf-8");
       const wikiAbs = wikiPathForRaw(root, cfg.paths.rawDir, cfg.paths.wikiDir, f);
-      const wikiRel = import_node_path9.default.relative(root, wikiAbs).replace(/\\/g, "/");
+      const wikiRel = import_node_path11.default.relative(root, wikiAbs).replace(/\\/g, "/");
       let rawOutText = "";
       const langInstruction = cfg.compile.language && cfg.compile.language !== "\u4E2D\u6587" ? `
 
@@ -22362,7 +22606,7 @@ async function compilePipeline(opts) {
 
 [CRITICAL REPEAT: OUTPUT MUST BE IN ${cfg.compile.language === "Original" ? "THE ORIGINAL LANGUAGE OF THE SOURCE TEXT" : cfg.compile.language}. DO NOT OUTPUT IN CHINESE UNLESS THE SOURCE IS CHINESE.]` : "";
       if (await fileExists(wikiAbs)) {
-        const existingWiki = await import_promises8.default.readFile(wikiAbs, "utf-8");
+        const existingWiki = await import_promises10.default.readFile(wikiAbs, "utf-8");
         const out = await textProvider.generateText({
           system: updateSystemPrompt + langInstruction,
           prompt: updateUserPrompt(relKey, existingWiki, rawText) + userLangInstruction
@@ -22376,7 +22620,7 @@ async function compilePipeline(opts) {
         rawOutText = out.text.trim();
       }
       let wikiContent = rawOutText;
-      let concepts = [];
+      let concepts2 = [];
       const wikiMatch = rawOutText.match(/<wiki>([\s\S]*?)<\/wiki>/);
       const conceptsMatch = rawOutText.match(/<concepts>([\s\S]*?)<\/concepts>/);
       if (wikiMatch) {
@@ -22384,7 +22628,7 @@ async function compilePipeline(opts) {
       }
       if (conceptsMatch) {
         try {
-          concepts = JSON.parse(conceptsMatch[1].trim());
+          concepts2 = JSON.parse(conceptsMatch[1].trim());
         } catch (e) {
           console.error("Failed to parse concepts JSON for", relKey);
         }
@@ -22400,18 +22644,18 @@ async function compilePipeline(opts) {
       const finalContent = header + wikiContent + "\n";
       await writeFileAtomic(wikiAbs, finalContent);
       updated.push({ file: wikiRel, language: cfg.compile.language || "\u4E2D\u6587" });
-      const conceptsDir = import_node_path9.default.join(root, cfg.paths.wikiDir, "concepts");
-      if (concepts.length > 0) {
-        await import_promises8.default.mkdir(conceptsDir, { recursive: true });
+      const conceptsDir = import_node_path11.default.join(root, cfg.paths.wikiDir, "concepts");
+      if (concepts2.length > 0) {
+        await import_promises10.default.mkdir(conceptsDir, { recursive: true });
         const dateStr = new Date().toISOString().split("T")[0];
-        for (const concept of concepts) {
+        for (const concept of concepts2) {
           const safeName = concept.name.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
           if (!safeName)
             continue;
-          const conceptFile = import_node_path9.default.join(conceptsDir, `${safeName}.md`);
+          const conceptFile = import_node_path11.default.join(conceptsDir, `${safeName}.md`);
           const logEntry = `- ${dateStr}: \u6765\u81EA [[${wikiRel.replace(/\.md$/, "")}]] \u7684\u8BA4\u77E5\uFF1A${concept.description}`;
           if (await fileExists(conceptFile)) {
-            const existingContent = await import_promises8.default.readFile(conceptFile, "utf-8");
+            const existingContent = await import_promises10.default.readFile(conceptFile, "utf-8");
             if (existingContent.includes("## Evolution Log")) {
               const newContent = existingContent.replace("## Evolution Log\n", `## Evolution Log
 ${logEntry}
@@ -22468,11 +22712,11 @@ ${logEntry}
       };
     }
   }
-  const authDir = import_node_path9.default.resolve(root, cfg.paths.wikiDir, "authoritative");
+  const authDir = import_node_path11.default.resolve(root, cfg.paths.wikiDir, "authoritative");
   if (await fileExists(authDir)) {
     const authFiles = await globby(["**/*.md"], { cwd: authDir, absolute: true });
     for (const af of authFiles) {
-      const content = await import_promises8.default.readFile(af, "utf-8");
+      const content = await import_promises10.default.readFile(af, "utf-8");
       const yamlMatch = content.match(/^---\n([\s\S]*?)\n---/);
       if (!yamlMatch)
         continue;
@@ -22490,10 +22734,11 @@ ${logEntry}
       for (const src of sourceLines) {
         if (!src)
           continue;
+        const normalizedSrc = src.replace(/^wiki\/sources\//, "wiki/summaries/");
         const rawKeyMatch = Object.keys(index.raw).find((k) => {
-          const expectedWiki = wikiPathForRaw(root, cfg.paths.rawDir, cfg.paths.wikiDir, import_node_path9.default.join(root, cfg.paths.rawDir, k));
-          const expectedRel = import_node_path9.default.relative(root, expectedWiki).replace(/\\/g, "/");
-          return expectedRel === src;
+          const expectedWiki = wikiPathForRaw(root, cfg.paths.rawDir, cfg.paths.wikiDir, import_node_path11.default.join(root, cfg.paths.rawDir, k));
+          const expectedRel = import_node_path11.default.relative(root, expectedWiki).replace(/\\/g, "/");
+          return expectedRel === normalizedSrc;
         });
         if (rawKeyMatch && index.raw[rawKeyMatch] && index.raw[rawKeyMatch].lastCompiledAt) {
           const compiledAt = new Date(index.raw[rawKeyMatch].lastCompiledAt);
@@ -22501,10 +22746,10 @@ ${logEntry}
             needsUpdate = true;
           }
         }
-        const srcAbs = import_node_path9.default.resolve(root, src);
+        const srcAbs = import_node_path11.default.resolve(root, normalizedSrc);
         if (await fileExists(srcAbs)) {
-          const srcText = await import_promises8.default.readFile(srcAbs, "utf-8");
-          newSourceContents.push(`### \u6765\u6E90\uFF1A[[${src}]]
+          const srcText = await import_promises10.default.readFile(srcAbs, "utf-8");
+          newSourceContents.push(`### \u6765\u6E90\uFF1A[[${normalizedSrc}]]
 ${srcText}`);
         }
       }
@@ -22533,7 +22778,7 @@ ${newYamlStr}
 ---
 
 ${finalContent}`);
-          updated.push({ file: import_node_path9.default.relative(root, af).replace(/\\/g, "/"), language: cfg.compile.language || "\u4E2D\u6587" });
+          updated.push({ file: import_node_path11.default.relative(root, af).replace(/\\/g, "/"), language: cfg.compile.language || "\u4E2D\u6587" });
         } catch (e) {
           console.error("Failed to update authoritative file:", af, e.message);
           errors.push(`Authoritative update failed for ${af}: ${e.message}`);
@@ -22543,6 +22788,23 @@ ${finalContent}`);
   }
   await saveIndex(paths.indexFile, index);
   await saveEmbeddings(embeddingsFile, embeddingsState);
+  const wikiDirAbs = import_node_path11.default.resolve(root, cfg.paths.wikiDir);
+  const summariesAbs = import_node_path11.default.join(wikiDirAbs, "summaries");
+  const conceptsAbs = import_node_path11.default.join(wikiDirAbs, "concepts");
+  const authoritativeAbs = import_node_path11.default.join(wikiDirAbs, "authoritative");
+  const outputsAbs = import_node_path11.default.resolve(root, cfg.paths.outputsDir);
+  const summaries = await fileExists(summariesAbs) ? (await globby(["**/*.md"], { cwd: summariesAbs, absolute: true })).map((x) => import_node_path11.default.relative(root, x).replace(/\\/g, "/")) : [];
+  const concepts = await fileExists(conceptsAbs) ? (await globby(["**/*.md"], { cwd: conceptsAbs, absolute: true })).map((x) => import_node_path11.default.relative(root, x).replace(/\\/g, "/")) : [];
+  const authoritative = await fileExists(authoritativeAbs) ? (await globby(["**/*.md"], { cwd: authoritativeAbs, absolute: true })).map((x) => import_node_path11.default.relative(root, x).replace(/\\/g, "/")) : [];
+  const outputs = await fileExists(outputsAbs) ? (await globby(["**/*.md"], { cwd: outputsAbs, absolute: true })).map((x) => import_node_path11.default.relative(root, x).replace(/\\/g, "/")) : [];
+  await updateWikiIndex({
+    root,
+    wikiDir: cfg.paths.wikiDir,
+    summaries,
+    concepts,
+    authoritative,
+    outputs
+  });
   await appendLog(paths.logFile, "compile", [
     `rawTotal: ${rawFiles.length}`,
     `wikiUpdated: ${updated.length}`,
@@ -22554,8 +22816,8 @@ ${finalContent}`);
 }
 
 // node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/pipelines/queryPipeline.js
-var import_promises9 = __toESM(require("fs/promises"), 1);
-var import_node_path10 = __toESM(require("path"), 1);
+var import_promises11 = __toESM(require("fs/promises"), 1);
+var import_node_path12 = __toESM(require("path"), 1);
 function slugify2(s) {
   return s.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "query";
 }
@@ -22573,7 +22835,7 @@ async function queryPipeline(opts) {
   const root = (_a3 = opts.root) != null ? _a3 : process.cwd();
   const paths = getProjectPaths(root);
   const cfg = await loadConfig(root);
-  const wikiDir = import_node_path10.default.resolve(root, cfg.paths.wikiDir);
+  const wikiDir = import_node_path12.default.resolve(root, cfg.paths.wikiDir);
   const hasWiki = await fileExists(wikiDir);
   const wikiFiles = hasWiki ? await globby(["**/*.md"], { cwd: wikiDir, absolute: true }) : [];
   const textProvider = new VolcengineProvider({
@@ -22593,7 +22855,7 @@ async function queryPipeline(opts) {
       fetcher: opts.fetcher
     });
   }
-  const embeddingsFile = import_node_path10.default.join(paths.stateDir, "embeddings.json");
+  const embeddingsFile = import_node_path12.default.join(paths.stateDir, "embeddings.json");
   const embeddingsState = await loadEmbeddings(embeddingsFile);
   const scored = [];
   let questionVector = null;
@@ -22608,8 +22870,8 @@ async function queryPipeline(opts) {
     }
   }
   for (const f of wikiFiles) {
-    const text = await import_promises9.default.readFile(f, "utf-8");
-    const relPath = import_node_path10.default.relative(root, f).replace(/\\/g, "/");
+    const text = await import_promises11.default.readFile(f, "utf-8");
+    const relPath = import_node_path12.default.relative(root, f).replace(/\\/g, "/");
     let score = 0;
     if (questionVector && embeddingsState[relPath]) {
       score = cosineSimilarity(questionVector, embeddingsState[relPath].vector);
@@ -22627,7 +22889,7 @@ async function queryPipeline(opts) {
   }
   scored.sort((a, b) => b.score - a.score);
   const top = scored.slice(0, cfg.query.topK);
-  const context = top.length === 0 ? "\uFF08\u672A\u627E\u5230\u5339\u914D\u7684 wiki \u5185\u5BB9\u3002\u8BF7\u5148\u8FD0\u884C compile\uFF0C\u6216\u589E\u52A0 raw \u526A\u85CF\u540E\u518D compile\u3002\uFF09" : top.map((x) => `## ${import_node_path10.default.relative(root, x.file)}
+  const context = top.length === 0 ? "\uFF08\u672A\u627E\u5230\u5339\u914D\u7684 wiki \u5185\u5BB9\u3002\u8BF7\u5148\u8FD0\u884C compile\uFF0C\u6216\u589E\u52A0 raw \u526A\u85CF\u540E\u518D compile\u3002\uFF09" : top.map((x) => `## ${import_node_path12.default.relative(root, x.file)}
 
 ${x.excerpt}`).join("\n\n---\n\n");
   const out = await textProvider.generateText({
@@ -22637,8 +22899,8 @@ ${x.excerpt}`).join("\n\n---\n\n");
   const ts = new Date();
   const stamp = ts.toISOString().replace(/[-:]/g, "").slice(0, 15);
   const slug = slugify2(opts.question);
-  const outRel = import_node_path10.default.join("outputs", `${stamp}-${slug}.md`).replace(/\\/g, "/");
-  const outAbs = import_node_path10.default.join(root, outRel);
+  const outRel = import_node_path12.default.join("outputs", `${stamp}-${slug}.md`).replace(/\\/g, "/");
+  const outAbs = import_node_path12.default.join(root, outRel);
   const md = [
     `# \u95EE\u9898\uFF1A${opts.question}`,
     "",
@@ -22664,14 +22926,14 @@ async function followUpPipeline(opts) {
   const root = (_a3 = opts.root) != null ? _a3 : process.cwd();
   const paths = getProjectPaths(root);
   const cfg = await loadConfig(root);
-  const historyAbsPath = import_node_path10.default.resolve(root, opts.historyFilePath);
+  const historyAbsPath = import_node_path12.default.resolve(root, opts.historyFilePath);
   let historyText = "";
   if (await fileExists(historyAbsPath)) {
-    historyText = await import_promises9.default.readFile(historyAbsPath, "utf-8");
+    historyText = await import_promises11.default.readFile(historyAbsPath, "utf-8");
   } else {
     throw new Error("History file not found.");
   }
-  const wikiDir = import_node_path10.default.resolve(root, cfg.paths.wikiDir);
+  const wikiDir = import_node_path12.default.resolve(root, cfg.paths.wikiDir);
   const hasWiki = await fileExists(wikiDir);
   const wikiFiles = hasWiki ? await globby(["**/*.md"], { cwd: wikiDir, absolute: true }) : [];
   const textProvider = new VolcengineProvider({
@@ -22691,7 +22953,7 @@ async function followUpPipeline(opts) {
       fetcher: opts.fetcher
     });
   }
-  const embeddingsFile = import_node_path10.default.join(paths.stateDir, "embeddings.json");
+  const embeddingsFile = import_node_path12.default.join(paths.stateDir, "embeddings.json");
   const embeddingsState = await loadEmbeddings(embeddingsFile);
   const scored = [];
   let questionVector = null;
@@ -22706,8 +22968,8 @@ async function followUpPipeline(opts) {
     }
   }
   for (const f of wikiFiles) {
-    const text = await import_promises9.default.readFile(f, "utf-8");
-    const relPath = import_node_path10.default.relative(root, f).replace(/\\/g, "/");
+    const text = await import_promises11.default.readFile(f, "utf-8");
+    const relPath = import_node_path12.default.relative(root, f).replace(/\\/g, "/");
     let score = 0;
     if (questionVector && embeddingsState[relPath]) {
       score = cosineSimilarity(questionVector, embeddingsState[relPath].vector);
@@ -22725,7 +22987,7 @@ async function followUpPipeline(opts) {
   }
   scored.sort((a, b) => b.score - a.score);
   const top = scored.slice(0, cfg.query.topK);
-  const newContext = top.length === 0 ? "\uFF08\u672A\u627E\u5230\u65B0\u7684\u8865\u5145\u8D44\u6599\u3002\uFF09" : top.map((x) => `## ${import_node_path10.default.relative(root, x.file)}
+  const newContext = top.length === 0 ? "\uFF08\u672A\u627E\u5230\u65B0\u7684\u8865\u5145\u8D44\u6599\u3002\uFF09" : top.map((x) => `## ${import_node_path12.default.relative(root, x.file)}
 
 ${x.excerpt}`).join("\n\n---\n\n");
   const out = await textProvider.generateText({
@@ -22743,10 +23005,151 @@ ${out.text.trim()}`;
   return { outputRel: opts.historyFilePath };
 }
 
+// node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/schema/report.js
+function renderSchemaDiffMarkdown(diff) {
+  const lines = [];
+  lines.push("# Schema Diff");
+  lines.push("");
+  lines.push("## Missing");
+  lines.push("");
+  if (diff.missing.length === 0)
+    lines.push("- (none)");
+  else
+    for (const m of diff.missing)
+      lines.push(`- ${m.kind}: ${m.id}`);
+  lines.push("");
+  lines.push("## Extra");
+  lines.push("");
+  if (diff.extra.length === 0)
+    lines.push("- (none)");
+  else
+    for (const x of diff.extra)
+      lines.push(`- ${x.kind}: ${x.id}`);
+  lines.push("");
+  lines.push("## Notes");
+  lines.push("");
+  for (const n of diff.notes)
+    lines.push(`- ${n}`);
+  lines.push("");
+  return lines.join("\n");
+}
+
+// node_modules/.pnpm/llm-wiki@file+../node_modules/llm-wiki/dist/provider/test.js
+async function testTextModel(cfg) {
+  var _a3, _b, _c;
+  const baseUrl = cfg.baseUrl || "";
+  const apiKey = cfg.apiKey || "";
+  if (!baseUrl || !apiKey) {
+    throw new Error("Missing baseUrl or apiKey");
+  }
+  const normalizedBase = baseUrl.replace(/\/$/, "");
+  const endpoint = /\/v3$/.test(normalizedBase) ? `${normalizedBase}/chat/completions` : `${normalizedBase}/v1/chat/completions`;
+  const fetchFn = cfg.fetcher || globalThis.fetch;
+  const resp = await fetchFn(endpoint, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: cfg.model,
+      messages: [{ role: "user", content: "ping" }],
+      temperature: 0,
+      max_tokens: 8
+    })
+  });
+  if (!resp.ok) {
+    const text = await resp.text().catch(() => "");
+    throw new Error(`LLM request failed: ${resp.status} ${resp.statusText} ${text}`);
+  }
+  const json2 = await resp.json().catch(() => null);
+  const content = (_c = (_b = (_a3 = json2 == null ? void 0 : json2.choices) == null ? void 0 : _a3[0]) == null ? void 0 : _b.message) == null ? void 0 : _c.content;
+  if (typeof content !== "string")
+    throw new Error("Unexpected LLM response shape");
+  return { ok: true, sample: content };
+}
+async function testEmbeddingModel(cfg) {
+  var _a3, _b;
+  const baseUrl = cfg.baseUrl || "";
+  const apiKey = cfg.apiKey || "";
+  if (!baseUrl || !apiKey) {
+    throw new Error("Missing baseUrl or apiKey");
+  }
+  const normalizedBase = baseUrl.replace(/\/$/, "");
+  const endpoint = /\/v3$/.test(normalizedBase) ? `${normalizedBase}/embeddings` : `${normalizedBase}/v1/embeddings`;
+  const fetchFn = cfg.fetcher || globalThis.fetch;
+  const resp = await fetchFn(endpoint, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: cfg.model,
+      input: ["ping"],
+      encoding_format: "float"
+    })
+  });
+  if (!resp.ok) {
+    const text = await resp.text().catch(() => "");
+    throw new Error(`Embeddings request failed: ${resp.status} ${resp.statusText} ${text}`);
+  }
+  const json2 = await resp.json().catch(() => null);
+  const vec = (_b = (_a3 = json2 == null ? void 0 : json2.data) == null ? void 0 : _a3[0]) == null ? void 0 : _b.embedding;
+  if (!Array.isArray(vec))
+    throw new Error("Unexpected Embeddings response shape");
+  return { ok: true, dim: vec.length };
+}
+
+// src/views/LLMWikiPanelView.ts
+var import_obsidian3 = require("obsidian");
+var LLMWIKI_PANEL_VIEW_TYPE = "llm-wiki-panel-view";
+var LLMWikiPanelView = class extends import_obsidian3.ItemView {
+  constructor(leaf, plugin) {
+    super(leaf);
+    this.plugin = plugin;
+  }
+  getViewType() {
+    return LLMWIKI_PANEL_VIEW_TYPE;
+  }
+  getDisplayText() {
+    return "LLM Wiki";
+  }
+  async onOpen() {
+    this.render();
+  }
+  async render() {
+    var _a3;
+    const { contentEl } = this;
+    contentEl.empty();
+    const header = contentEl.createEl("h2", { text: "LLM Wiki" });
+    header.style.marginTop = "0";
+    const btnWrap = contentEl.createDiv();
+    for (const id of this.plugin.getQuickActions()) {
+      const btn = btnWrap.createEl("button", { text: this.plugin.getActionLabel(id) });
+      btn.style.display = "block";
+      btn.style.width = "100%";
+      btn.style.marginBottom = "8px";
+      btn.onclick = () => this.plugin.runAction(id);
+    }
+    contentEl.createEl("h3", { text: "Schema Diff" });
+    const pre = contentEl.createEl("pre");
+    pre.style.whiteSpace = "pre-wrap";
+    pre.setText((_a3 = this.plugin.schemaDiffText) != null ? _a3 : "Not loaded");
+    const refresh = contentEl.createEl("button", { text: "Re-analyze" });
+    refresh.style.marginTop = "8px";
+    refresh.style.width = "100%";
+    refresh.onclick = async () => {
+      await this.plugin.refreshSchemaDiff();
+      this.render();
+    };
+  }
+};
+
 // src/main.ts
 var obsidianFetch = async (url2, options) => {
   const reqUrl = typeof url2 === "string" ? url2 : url2.toString();
-  const res = await (0, import_obsidian3.requestUrl)({
+  const res = await (0, import_obsidian4.requestUrl)({
     url: reqUrl,
     method: (options == null ? void 0 : options.method) || "GET",
     headers: options == null ? void 0 : options.headers,
@@ -22761,10 +23164,102 @@ var obsidianFetch = async (url2, options) => {
     json: async () => res.json
   };
 };
-var LLMWikiPlugin = class extends import_obsidian3.Plugin {
+var LLMWikiPlugin = class extends import_obsidian4.Plugin {
+  constructor() {
+    super(...arguments);
+    this.schemaDiffText = null;
+  }
+  async refreshSchemaDiff() {
+    try {
+      const root = this.getVaultBasePath();
+      const schemaPath = path12.join(root, "SCHEMA.md");
+      if (!fs15.existsSync(schemaPath)) {
+        this.schemaDiffText = "SCHEMA.md not found in vault root.";
+        new import_obsidian4.Notice("SCHEMA.md not found in vault root.");
+        return;
+      }
+      const md = fs15.readFileSync(schemaPath, "utf-8");
+      const parsed = parseSchemaMarkdown(md);
+      const diff = diffSchemaAgainstProject(parsed, root);
+      this.schemaDiffText = renderSchemaDiffMarkdown(diff);
+    } catch (e) {
+      console.error(e);
+      this.schemaDiffText = "Error reading schema diff.";
+    }
+  }
+  getQuickActions() {
+    var _a3;
+    return (_a3 = this.settings.quickActions) != null ? _a3 : ["init", "compile", "query", "followup", "status"];
+  }
+  getActionLabel(id) {
+    switch (id) {
+      case "init":
+        return "Init";
+      case "compile":
+        return "Compile";
+      case "query":
+        return "Query";
+      case "followup":
+        return "Follow-up";
+      case "authoritative":
+        return "Mark Authoritative";
+      case "status":
+        return "Status";
+      case "schema":
+        return "Schema Diff";
+      default:
+        return id;
+    }
+  }
+  runAction(id) {
+    if (id === "init")
+      this.initWiki();
+    else if (id === "compile")
+      this.compileWiki();
+    else if (id === "query") {
+      new QueryModal(this.app, (query) => {
+        this.queryWiki(query);
+      }).open();
+    } else if (id === "followup") {
+      const activeFile = this.app.workspace.getActiveFile();
+      if (activeFile && (activeFile.path.startsWith("outputs/") || activeFile.path.startsWith("wiki/authoritative/"))) {
+        new QueryModal(this.app, (query) => {
+          this.followUpWiki(query, activeFile.path);
+        }).open();
+      } else {
+        new import_obsidian4.Notice("Follow-up requires an outputs/ or wiki/authoritative/ file.");
+      }
+    } else if (id === "authoritative") {
+      const activeFile = this.app.workspace.getActiveFile();
+      if (activeFile && activeFile.path.startsWith("outputs/")) {
+        this.markAuthoritative(activeFile);
+      } else {
+        new import_obsidian4.Notice("Mark Authoritative requires an outputs/ file.");
+      }
+    } else if (id === "status")
+      this.showStatus();
+    else if (id === "schema") {
+      this.refreshSchemaDiff();
+      new import_obsidian4.Notice("Schema diff refreshed.");
+    }
+  }
+  onSettingsChanged() {
+    const leaves = this.app.workspace.getLeavesOfType(LLMWIKI_PANEL_VIEW_TYPE);
+    for (const leaf of leaves) {
+      const view = leaf.view;
+      view.render();
+    }
+  }
   async onload() {
     await this.loadSettings();
     this.addSettingTab(new LLMWikiSettingTab(this.app, this));
+    this.registerView(
+      LLMWIKI_PANEL_VIEW_TYPE,
+      (leaf) => new LLMWikiPanelView(leaf, this)
+    );
+    this.addRibbonIcon("bot", "LLM Wiki", () => {
+      this.activatePanelView();
+    });
     this.addCommand({
       id: "llm-wiki-init",
       name: "Initialize Wiki",
@@ -22819,6 +23314,7 @@ var LLMWikiPlugin = class extends import_obsidian3.Plugin {
       name: "Status",
       callback: () => this.showStatus()
     });
+    await this.refreshSchemaDiff();
   }
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -22826,16 +23322,23 @@ var LLMWikiPlugin = class extends import_obsidian3.Plugin {
   async saveSettings() {
     await this.saveData(this.settings);
   }
+  async activatePanelView() {
+    const leaf = this.app.workspace.getRightLeaf(false);
+    if (!leaf)
+      return;
+    await leaf.setViewState({ type: LLMWIKI_PANEL_VIEW_TYPE, active: true });
+    this.app.workspace.revealLeaf(leaf);
+  }
   getVaultBasePath() {
     const adapter = this.app.vault.adapter;
-    if (adapter instanceof import_obsidian3.FileSystemAdapter) {
+    if (adapter instanceof import_obsidian4.FileSystemAdapter) {
       return adapter.getBasePath();
     }
     throw new Error("Only supported on desktop (FileSystemAdapter).");
   }
   ensureConfig() {
     const root = this.getVaultBasePath();
-    const configPath = path10.join(root, "config", "llm-wiki.config.json");
+    const configPath = path12.join(root, "config", "llm-wiki.config.json");
     const configData = {
       paths: {
         rawDir: this.settings.rawPath,
@@ -22865,29 +23368,29 @@ var LLMWikiPlugin = class extends import_obsidian3.Plugin {
         topK: 8
       }
     };
-    if (!fs12.existsSync(configPath)) {
-      fs12.mkdirSync(path10.join(root, "config"), { recursive: true });
+    if (!fs15.existsSync(configPath)) {
+      fs15.mkdirSync(path12.join(root, "config"), { recursive: true });
     }
-    fs12.writeFileSync(configPath, JSON.stringify(configData, null, 2));
+    fs15.writeFileSync(configPath, JSON.stringify(configData, null, 2));
   }
   async initWiki() {
     try {
-      new import_obsidian3.Notice("Initializing LLM Wiki...");
+      new import_obsidian4.Notice("Initializing LLM Wiki...");
       const root = this.getVaultBasePath();
       this.ensureConfig();
       const originalCwd = process.cwd();
       process.chdir(root);
       await initCommand({ root, model: this.settings.modelName });
       process.chdir(originalCwd);
-      new import_obsidian3.Notice("LLM Wiki initialized successfully!");
+      new import_obsidian4.Notice("LLM Wiki initialized successfully!");
     } catch (e) {
       console.error(e);
-      new import_obsidian3.Notice("Error initializing wiki: " + e.message);
+      new import_obsidian4.Notice("Error initializing wiki: " + e.message);
     }
   }
   async compileWiki() {
     try {
-      new import_obsidian3.Notice("Compiling LLM Wiki...");
+      new import_obsidian4.Notice("Compiling LLM Wiki...");
       const root = this.getVaultBasePath();
       this.ensureConfig();
       const originalCwd = process.cwd();
@@ -22895,50 +23398,50 @@ var LLMWikiPlugin = class extends import_obsidian3.Plugin {
       const res = await compilePipeline({ root, fetcher: obsidianFetch });
       process.chdir(originalCwd);
       if (res.errors && res.errors.length > 0) {
-        new import_obsidian3.Notice(`LLM Wiki compiled with ${res.errors.length} errors. Check wiki/log.md for details.`);
+        new import_obsidian4.Notice(`LLM Wiki compiled with ${res.errors.length} errors. Check wiki/log.md for details.`);
       } else {
-        new import_obsidian3.Notice("LLM Wiki compiled successfully!");
+        new import_obsidian4.Notice("LLM Wiki compiled successfully!");
       }
     } catch (e) {
       console.error(e);
-      new import_obsidian3.Notice("Error compiling wiki: " + e.message);
+      new import_obsidian4.Notice("Error compiling wiki: " + e.message);
     }
   }
   async queryWiki(query) {
     try {
-      new import_obsidian3.Notice("Querying LLM Wiki...");
+      new import_obsidian4.Notice("Querying LLM Wiki...");
       const root = this.getVaultBasePath();
       this.ensureConfig();
       const originalCwd = process.cwd();
       process.chdir(root);
       const { outputRel } = await queryPipeline({ root, question: query, fetcher: obsidianFetch });
       process.chdir(originalCwd);
-      new import_obsidian3.Notice("Query complete.");
+      new import_obsidian4.Notice("Query complete.");
       await this.app.workspace.openLinkText(outputRel, "", true);
     } catch (e) {
       console.error(e);
-      new import_obsidian3.Notice("Error querying wiki: " + e.message);
+      new import_obsidian4.Notice("Error querying wiki: " + e.message);
     }
   }
   async followUpWiki(query, filePath) {
     try {
-      new import_obsidian3.Notice("Generating follow-up answer...");
+      new import_obsidian4.Notice("Generating follow-up answer...");
       const root = this.getVaultBasePath();
       this.ensureConfig();
       const originalCwd = process.cwd();
       process.chdir(root);
       await followUpPipeline({ root, question: query, historyFilePath: filePath, fetcher: obsidianFetch });
       process.chdir(originalCwd);
-      new import_obsidian3.Notice("Follow-up complete.");
+      new import_obsidian4.Notice("Follow-up complete.");
     } catch (e) {
       console.error(e);
-      new import_obsidian3.Notice("Error during follow-up: " + e.message);
+      new import_obsidian4.Notice("Error during follow-up: " + e.message);
     }
   }
   async markAuthoritative(file2) {
     try {
       const content = await this.app.vault.read(file2);
-      const sourceRegex = /\[\[(wiki\/sources\/[^\]]+)\]\]/g;
+      const sourceRegex = /\[\[(wiki\/(?:summaries|sources)\/[^\]]+)\]\]/g;
       const sources = /* @__PURE__ */ new Set();
       let match;
       while ((match = sourceRegex.exec(content)) !== null) {
@@ -22964,20 +23467,20 @@ ${sourcesList}
       }
       await this.app.vault.modify(file2, newContent);
       await this.app.fileManager.renameFile(file2, newPath);
-      new import_obsidian3.Notice("Marked as Authoritative and moved to wiki/authoritative");
+      new import_obsidian4.Notice("Marked as Authoritative and moved to wiki/authoritative");
     } catch (e) {
       console.error(e);
-      new import_obsidian3.Notice("Error marking authoritative: " + e.message);
+      new import_obsidian4.Notice("Error marking authoritative: " + e.message);
     }
   }
   async showStatus() {
     try {
       const root = this.getVaultBasePath();
-      const indexPath = path10.join(root, ".llm-wiki", "index.json");
-      const logPath = path10.join(root, "wiki", "log.md");
+      const indexPath = path12.join(root, ".llm-wiki", "index.json");
+      const logPath = path12.join(root, "wiki", "log.md");
       let statusMsg = "LLM Wiki Status:\n";
-      if (fs12.existsSync(indexPath)) {
-        const index = JSON.parse(fs12.readFileSync(indexPath, "utf-8"));
+      if (fs15.existsSync(indexPath)) {
+        const index = JSON.parse(fs15.readFileSync(indexPath, "utf-8"));
         const rawFiles = Object.keys(index.raw || {});
         const totalCount = rawFiles.length;
         let successCount = 0;
@@ -23002,12 +23505,46 @@ ${sourcesList}
       } else {
         statusMsg = "LLM Wiki not initialized or no index found.";
       }
-      new import_obsidian3.Notice(statusMsg, 1e4);
-      if (fs12.existsSync(logPath)) {
+      new import_obsidian4.Notice(statusMsg, 1e4);
+      if (fs15.existsSync(logPath)) {
         await this.app.workspace.openLinkText("wiki/log.md", "", true);
       }
     } catch (e) {
-      new import_obsidian3.Notice("Error reading status.");
+      new import_obsidian4.Notice("Error reading status.");
+    }
+  }
+  async testTextModel() {
+    try {
+      const result = await testTextModel({
+        baseUrl: this.settings.baseUrl,
+        apiKey: this.settings.apiKey,
+        model: this.settings.modelName,
+        fetcher: obsidianFetch
+      });
+      new import_obsidian4.Notice("Text model test success.");
+    } catch (e) {
+      console.error(e);
+      new import_obsidian4.Notice("Text model test failed: " + e.message);
+    }
+  }
+  async testEmbeddingModel() {
+    try {
+      if (!this.settings.enableEmbedding) {
+        new import_obsidian4.Notice("Embedding is disabled.");
+        return;
+      }
+      const baseUrl = this.settings.embedBaseUrl || this.settings.baseUrl;
+      const apiKey = this.settings.embedApiKey || this.settings.apiKey;
+      const result = await testEmbeddingModel({
+        baseUrl,
+        apiKey,
+        model: this.settings.embedModelName,
+        fetcher: obsidianFetch
+      });
+      new import_obsidian4.Notice("Embedding model test success.");
+    } catch (e) {
+      console.error(e);
+      new import_obsidian4.Notice("Embedding model test failed: " + e.message);
     }
   }
 };

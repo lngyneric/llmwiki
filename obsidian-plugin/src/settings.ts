@@ -18,6 +18,7 @@ export interface LLMWikiSettings {
   embedModelName: string;
   // Compilation
   outputLanguage: string;
+  quickActions: string[];
 }
 
 export const DEFAULT_SETTINGS: LLMWikiSettings = {
@@ -34,6 +35,7 @@ export const DEFAULT_SETTINGS: LLMWikiSettings = {
   embedBaseUrl: "https://ark.cn-beijing.volces.com/api/v3",
   embedModelName: "ep-20240521-embed-xxx",
   outputLanguage: "中文",
+  quickActions: ["init", "compile", "query", "followup", "status"],
 };
 
 export class LLMWikiSettingTab extends PluginSettingTab {
@@ -193,5 +195,50 @@ export class LLMWikiSettingTab extends PluginSettingTab {
             })
         );
     }
+
+    containerEl.createEl("h3", { text: "Quick Actions" });
+
+    const actionOptions: Record<string, string> = {
+      init: "Init",
+      compile: "Compile",
+      query: "Query",
+      followup: "Follow-up",
+      authoritative: "Mark Authoritative",
+      status: "Status",
+      schema: "Schema Diff"
+    };
+
+    for (let i = 0; i < 5; i++) {
+      new Setting(containerEl)
+        .setName(`Button ${i + 1}`)
+        .addDropdown((dropdown) => {
+          Object.entries(actionOptions).forEach(([value, label]) => dropdown.addOption(value, label));
+          dropdown
+            .setValue(this.plugin.settings.quickActions[i] ?? "init")
+            .onChange(async (value) => {
+              this.plugin.settings.quickActions[i] = value;
+              await this.plugin.saveSettings();
+              this.plugin.onSettingsChanged();
+            });
+        });
+    }
+
+    containerEl.createEl("h3", { text: "Connection Test" });
+
+    new Setting(containerEl)
+      .setName("Test Text Model")
+      .addButton((btn) =>
+        btn.setButtonText("Run").onClick(async () => {
+          await this.plugin.testTextModel();
+        })
+      );
+
+    new Setting(containerEl)
+      .setName("Test Embedding Model")
+      .addButton((btn) =>
+        btn.setButtonText("Run").onClick(async () => {
+          await this.plugin.testEmbeddingModel();
+        })
+      );
   }
 }

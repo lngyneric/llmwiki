@@ -1,0 +1,63 @@
+name: quartz-content-sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout vault1
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Compile
+        run: node dist/cli.js compile --root .
+
+      - name: Export
+        run: node dist/cli.js export --root .
+
+      - name: Lint export
+        run: node dist/cli.js lint --root .
+
+      - name: Checkout vault2
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.VAULT2_REPO }}
+          token: ${{ secrets.VAULT2_PAT }}
+          path: vault2
+          ref: ${{ secrets.VAULT2_BRANCH }}
+
+      - name: Sync export -> vault2/content
+        run: |
+          mkdir -p vault2/content
+          rsync -a --delete export/ vault2/content/
+
+      - name: Commit and push
+        working-directory: vault2
+        run: |
+          git config user.name "llm-wiki-bot"
+          git config user.email "llm-wiki-bot@users.noreply.github.com"
+          git add content
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "chore(content): sync from vault1 $GITHUB_SHA"
+          git push origin HEAD:${{ secrets.VAULT2_BRANCH }}
+

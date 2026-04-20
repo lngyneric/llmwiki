@@ -1,6 +1,6 @@
 {
   "name": "obsidian-llmwiki-plugin",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "LLM Wiki plugin for Obsidian",
   "main": "main.js",
   "scripts": {

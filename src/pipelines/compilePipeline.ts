@@ -7,13 +7,49 @@ import { loadConfig } from "../core/config.js";
 import { loadIndex, saveIndex, loadEmbeddings, saveEmbeddings } from "../core/state.js";
 import { fileExists, writeFileAtomic } from "../core/fs.js";
 import { appendLog } from "../core/log.js";
+import { updateWikiIndex } from "../core/indexFile.js";
 import { VolcengineProvider } from "../provider/volcengine.js";
 import { compileSystemPrompt, compileUserPrompt, updateSystemPrompt, updateUserPrompt, authoritativeUpdateSystemPrompt, authoritativeUpdateUserPrompt } from "../templates/defaultPrompts.js";
 
 function wikiPathForRaw(root: string, rawDir: string, wikiDir: string, rawAbs: string): string {
   const rel = path.relative(path.resolve(root, rawDir), rawAbs);
   const noExt = rel.replace(/\.(md|txt)$/i, "");
-  return path.join(path.resolve(root, wikiDir), "sources", `${noExt}.md`);
+  return path.join(path.resolve(root, wikiDir), "summaries", `${noExt}.md`);
+}
+
+async function migrateSourcesToSummaries(wikiDirAbs: string) {
+  const sourcesDir = path.join(wikiDirAbs, "sources");
+  const summariesDir = path.join(wikiDirAbs, "summaries");
+
+  if (await fileExists(summariesDir)) return;
+  if (!(await fileExists(sourcesDir))) return;
+
+  const moveDirRecursive = async (from: string, to: string) => {
+    await fs.mkdir(to, { recursive: true });
+    const entries = await fs.readdir(from, { withFileTypes: true });
+    for (const ent of entries) {
+      const src = path.join(from, ent.name);
+      const dst = path.join(to, ent.name);
+      if (ent.isDirectory()) {
+        await moveDirRecursive(src, dst);
+        await fs.rmdir(src);
+        continue;
+      }
+      try {
+        await fs.rename(src, dst);
+      } catch {
+        await fs.copyFile(src, dst);
+        await fs.unlink(src);
+      }
+    }
+  };
+
+  try {
+    await fs.rename(sourcesDir, summariesDir);
+  } catch {
+    await moveDirRecursive(sourcesDir, summariesDir);
+    await fs.rmdir(sourcesDir);
+  }
 }
 
 export async function compilePipeline(opts: { root?: string; full?: boolean; fetcher?: typeof fetch }) {
@@ -24,6 +60,8 @@ export async function compilePipeline(opts: { root?: string; full?: boolean; fet
   const index = await loadIndex(paths.indexFile);
   const embeddingsFile = path.join(paths.stateDir, "embeddings.json");
   const embeddingsState = await loadEmbeddings(embeddingsFile);
+
+  await migrateSourcesToSummaries(path.resolve(root, cfg.paths.wikiDir));
 
   const rawDir = path.resolve(root, cfg.paths.rawDir);
   const rawFiles = await globby(["**/*.md", "**/*.txt"], { cwd: rawDir, absolute: true });
@@ -243,11 +281,12 @@ ${logEntry}
 
       for (const src of sourceLines) {
         if (!src) continue;
+        const normalizedSrc = src.replace(/^wiki\/sources\//, "wiki/summaries/");
         // Map wiki/sources/xxxx.md back to raw key to check index
         const rawKeyMatch = Object.keys(index.raw).find(k => {
           const expectedWiki = wikiPathForRaw(root, cfg.paths.rawDir, cfg.paths.wikiDir, path.join(root, cfg.paths.rawDir, k));
           const expectedRel = path.relative(root, expectedWiki).replace(/\\/g, "/");
-          return expectedRel === src;
+          return expectedRel === normalizedSrc;
         });
 
         if (rawKeyMatch && index.raw[rawKeyMatch] && index.raw[rawKeyMatch].lastCompiledAt) {
@@ -258,10 +297,10 @@ ${logEntry}
         }
         
         // Load source content anyway in case we need to update
-        const srcAbs = path.resolve(root, src);
+        const srcAbs = path.resolve(root, normalizedSrc);
         if (await fileExists(srcAbs)) {
           const srcText = await fs.readFile(srcAbs, "utf-8");
-          newSourceContents.push(`### 来源：[[${src}]]\n${srcText}`);
+          newSourceContents.push(`### 来源：[[${normalizedSrc}]]\n${srcText}`);
         }
       }
 
@@ -304,6 +343,37 @@ ${logEntry}
 
   await saveIndex(paths.indexFile, index);
   await saveEmbeddings(embeddingsFile, embeddingsState);
+
+  const wikiDirAbs = path.resolve(root, cfg.paths.wikiDir);
+  const summariesAbs = path.join(wikiDirAbs, "summaries");
+  const conceptsAbs = path.join(wikiDirAbs, "concepts");
+  const authoritativeAbs = path.join(wikiDirAbs, "authoritative");
+  const outputsAbs = path.resolve(root, cfg.paths.outputsDir);
+
+  const summaries = (await fileExists(summariesAbs))
+    ? (await globby(["**/*.md"], { cwd: summariesAbs, absolute: true })).map((x) => path.relative(root, x).replace(/\\/g, "/"))
+    : [];
+
+  const concepts = (await fileExists(conceptsAbs))
+    ? (await globby(["**/*.md"], { cwd: conceptsAbs, absolute: true })).map((x) => path.relative(root, x).replace(/\\/g, "/"))
+    : [];
+
+  const authoritative = (await fileExists(authoritativeAbs))
+    ? (await globby(["**/*.md"], { cwd: authoritativeAbs, absolute: true })).map((x) => path.relative(root, x).replace(/\\/g, "/"))
+    : [];
+
+  const outputs = (await fileExists(outputsAbs))
+    ? (await globby(["**/*.md"], { cwd: outputsAbs, absolute: true })).map((x) => path.relative(root, x).replace(/\\/g, "/"))
+    : [];
+
+  await updateWikiIndex({
+    root,
+    wikiDir: cfg.paths.wikiDir,
+    summaries,
+    concepts,
+    authoritative,
+    outputs
+  });
 
   await appendLog(paths.logFile, "compile", [
     `rawTotal: ${rawFiles.length}`,

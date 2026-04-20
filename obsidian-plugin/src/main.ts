@@ -1,11 +1,22 @@
-import { Plugin, Notice, FileSystemAdapter, requestUrl } from "obsidian";
+import { Plugin, Notice, FileSystemAdapter, requestUrl, WorkspaceLeaf } from "obsidian";
 import { LLMWikiSettings, DEFAULT_SETTINGS, LLMWikiSettingTab } from "./settings";
 import { QueryModal } from "./QueryModal";
 import * as path from "node:path";
 import * as fs from "node:fs";
 
 // Import from the local package
-import { compilePipeline, queryPipeline, followUpPipeline, initCommand } from "llm-wiki";
+import {
+  compilePipeline,
+  queryPipeline,
+  followUpPipeline,
+  initCommand,
+  renderSchemaDiffMarkdown,
+  parseSchemaMarkdown,
+  diffSchemaAgainstProject,
+  testTextModel,
+  testEmbeddingModel
+} from "llm-wiki";
+import { LLMWIKI_PANEL_VIEW_TYPE, LLMWikiPanelView } from "./views/LLMWikiPanelView";
 
 // Adapter to make Obsidian's requestUrl act like fetch
 const obsidianFetch = async (url: any, options: any) => {
@@ -28,10 +39,102 @@ const obsidianFetch = async (url: any, options: any) => {
 
 export default class LLMWikiPlugin extends Plugin {
   settings: LLMWikiSettings;
+  schemaDiffText: string | null = null;
+
+  async refreshSchemaDiff() {
+    try {
+      const root = this.getVaultBasePath();
+      const schemaPath = path.join(root, "SCHEMA.md");
+      if (!fs.existsSync(schemaPath)) {
+        this.schemaDiffText = "SCHEMA.md not found in vault root.";
+        new Notice("SCHEMA.md not found in vault root.");
+        return;
+      }
+      const md = fs.readFileSync(schemaPath, "utf-8");
+      const parsed = parseSchemaMarkdown(md);
+      const diff = diffSchemaAgainstProject(parsed, root);
+      this.schemaDiffText = renderSchemaDiffMarkdown(diff);
+    } catch (e: any) {
+      console.error(e);
+      this.schemaDiffText = "Error reading schema diff.";
+    }
+  }
+
+  getQuickActions(): string[] {
+    return this.settings.quickActions ?? ["init", "compile", "query", "followup", "status"];
+  }
+
+  getActionLabel(id: string): string {
+    switch (id) {
+      case "init":
+        return "Init";
+      case "compile":
+        return "Compile";
+      case "query":
+        return "Query";
+      case "followup":
+        return "Follow-up";
+      case "authoritative":
+        return "Mark Authoritative";
+      case "status":
+        return "Status";
+      case "schema":
+        return "Schema Diff";
+      default:
+        return id;
+    }
+  }
+
+  runAction(id: string) {
+    if (id === "init") this.initWiki();
+    else if (id === "compile") this.compileWiki();
+    else if (id === "query") {
+      new QueryModal(this.app, (query) => {
+        this.queryWiki(query);
+      }).open();
+    } else if (id === "followup") {
+      const activeFile = this.app.workspace.getActiveFile();
+      if (activeFile && (activeFile.path.startsWith("outputs/") || activeFile.path.startsWith("wiki/authoritative/"))) {
+        new QueryModal(this.app, (query) => {
+          this.followUpWiki(query, activeFile.path);
+        }).open();
+      } else {
+        new Notice("Follow-up requires an outputs/ or wiki/authoritative/ file.");
+      }
+    } else if (id === "authoritative") {
+      const activeFile = this.app.workspace.getActiveFile();
+      if (activeFile && activeFile.path.startsWith("outputs/")) {
+        this.markAuthoritative(activeFile);
+      } else {
+        new Notice("Mark Authoritative requires an outputs/ file.");
+      }
+    } else if (id === "status") this.showStatus();
+    else if (id === "schema") {
+      this.refreshSchemaDiff();
+      new Notice("Schema diff refreshed.");
+    }
+  }
+
+  onSettingsChanged() {
+    const leaves = this.app.workspace.getLeavesOfType(LLMWIKI_PANEL_VIEW_TYPE);
+    for (const leaf of leaves) {
+      const view = leaf.view as LLMWikiPanelView;
+      view.render();
+    }
+  }
 
   async onload() {
     await this.loadSettings();
     this.addSettingTab(new LLMWikiSettingTab(this.app, this));
+
+    this.registerView(
+      LLMWIKI_PANEL_VIEW_TYPE,
+      (leaf: WorkspaceLeaf) => new LLMWikiPanelView(leaf, this)
+    );
+
+    this.addRibbonIcon("bot", "LLM Wiki", () => {
+      this.activatePanelView();
+    });
 
     this.addCommand({
       id: "llm-wiki-init",
@@ -92,6 +195,8 @@ export default class LLMWikiPlugin extends Plugin {
       name: "Status",
       callback: () => this.showStatus(),
     });
+
+    await this.refreshSchemaDiff();
   }
 
   async loadSettings() {
@@ -100,6 +205,13 @@ export default class LLMWikiPlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings);
+  }
+
+  async activatePanelView() {
+    const leaf = this.app.workspace.getRightLeaf(false);
+    if (!leaf) return;
+    await leaf.setViewState({ type: LLMWIKI_PANEL_VIEW_TYPE, active: true });
+    this.app.workspace.revealLeaf(leaf);
   }
 
   private getVaultBasePath(): string {
@@ -238,8 +350,7 @@ export default class LLMWikiPlugin extends Plugin {
   async markAuthoritative(file: any) {
     try {
       const content = await this.app.vault.read(file);
-      // Regex to find [[wiki/sources/...]] or similar
-      const sourceRegex = /\[\[(wiki\/sources\/[^\]]+)\]\]/g;
+      const sourceRegex = /\[\[(wiki\/(?:summaries|sources)\/[^\]]+)\]\]/g;
       const sources = new Set<string>();
       let match;
       while ((match = sourceRegex.exec(content)) !== null) {
@@ -314,6 +425,42 @@ export default class LLMWikiPlugin extends Plugin {
       }
     } catch (e) {
       new Notice("Error reading status.");
+    }
+  }
+
+  async testTextModel() {
+    try {
+      const result = await testTextModel({
+        baseUrl: this.settings.baseUrl,
+        apiKey: this.settings.apiKey,
+        model: this.settings.modelName,
+        fetcher: obsidianFetch as any
+      });
+      new Notice("Text model test success.");
+    } catch (e: any) {
+      console.error(e);
+      new Notice("Text model test failed: " + e.message);
+    }
+  }
+
+  async testEmbeddingModel() {
+    try {
+      if (!this.settings.enableEmbedding) {
+        new Notice("Embedding is disabled.");
+        return;
+      }
+      const baseUrl = this.settings.embedBaseUrl || this.settings.baseUrl;
+      const apiKey = this.settings.embedApiKey || this.settings.apiKey;
+      const result = await testEmbeddingModel({
+        baseUrl,
+        apiKey,
+        model: this.settings.embedModelName,
+        fetcher: obsidianFetch as any
+      });
+      new Notice("Embedding model test success.");
+    } catch (e: any) {
+      console.error(e);
+      new Notice("Embedding model test failed: " + e.message);
     }
   }
 }

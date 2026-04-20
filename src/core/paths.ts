@@ -42,7 +42,6 @@ export function getProjectPaths(root = process.cwd()): ProjectPaths {
     configFile,
     stateDir: path.join(root, ".llm-wiki"),
     indexFile: path.join(root, ".llm-wiki", "index.json"),
-    logFile: path.join(root, "wiki", "log.md")
+    logFile: path.join(wikiDir, "log.md")
   };
 }
-

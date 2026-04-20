@@ -35,6 +35,17 @@ const QueryConfigSchema = z.object({
   topK: z.number().int().min(1).max(50).default(8)
 });
 
+const ExportConfigSchema = z.object({
+  outDir: z.string().default("export"),
+  includeAssets: z.boolean().default(false),
+  assetsDir: z.string().default("assets")
+});
+
+const LintConfigSchema = z.object({
+  maxDescriptionLength: z.number().int().min(1).max(1000).default(200),
+  linkCheck: z.boolean().default(false)
+});
+
 export const ConfigSchema = z.object({
   paths: PathsConfigSchema.default({
     rawDir: "raw",
@@ -45,7 +56,9 @@ export const ConfigSchema = z.object({
   provider: ProviderConfigSchema,
   embedding: EmbeddingConfigSchema.optional(),
   compile: CompileConfigSchema.default({ concurrency: 2, language: "中文" }),
-  query: QueryConfigSchema.default({ topK: 8 })
+  query: QueryConfigSchema.default({ topK: 8 }),
+  export: ExportConfigSchema.optional(),
+  lint: LintConfigSchema.optional()
 });
 
 export type AppConfig = z.infer<typeof ConfigSchema>;
@@ -56,4 +69,3 @@ export async function loadConfig(root = process.cwd()): Promise<AppConfig> {
   const json = JSON.parse(raw);
   return ConfigSchema.parse(json);
 }
-
